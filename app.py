@@ -72,7 +72,7 @@ def handle_message(event):
     if msg_from_user=="test": # memastikan flask berjalan dengan aman
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="flask app is running with event info and followers edited!"))
+            TextSendMessage(text="flask app is running with event info and followers edited with array to string!"))
     elif msg_from_user=="tesvar": # test buat nyimpen variable
         message = TextSendMessage(text="var = " + var)
         line_bot_api.reply_message(event.reply_token, message)
@@ -80,22 +80,22 @@ def handle_message(event):
     elif msg_from_user == "followers":
         followers = line_bot_api.get_followers_ids()
 
-        string_to_send = ""
-        string_to_send += "tipe dari followers adalah " + type(followers) + "\n"
+        # string_to_send = ""
+        # string_to_send += "tipe dari followers adalah " + type(followers) + "\n"
         # string_to_send += "asumsi dia objek, atributnya adalah" + getattr(followers) + "\n"
         # string_to_send += "followers =  " + str(followers) + "\n"
 
-        consolelog += string_to_send
+        # consolelog += string_to_send
 
         # message = TextSendMessage(text = string_to_send)
-        message = TextSendMessage(text = followers.user_ids)
+        message = TextSendMessage(text = "user id ke 0 adalah " + followers.user_ids[0])
         line_bot_api.reply_message(event.reply_token, message)
 
     elif msg_from_user == "eventinfo":
          
         string_to_send = ""
-        string_to_send += "tipe dari event adalah " + type(event) + "\n"
-        string_to_send += "asumsi dia objek, atributnya adalah" + getattr(event) + "\n"
+        string_to_send += "tipe dari event adalah " + str(type(event)) + "\n"
+        string_to_send += "asumsi dia objek, atributnya adalah" + str(getattr(event)) + "\n"
         string_to_send += "event =  " + str(event) + "\n"
 
         consolelog += string_to_send
@@ -105,7 +105,7 @@ def handle_message(event):
 
 
     elif msg_from_user == "printarray":
-        message = TextSendMessage(text = "array of number = " + arrOfNumber)
+        message = TextSendMessage(text = "array of number = " + str(arrOfNumber))
         line_bot_api.reply_message(event.reply_token, message)
     
     # FOR DEBUGGING PURPOSE
