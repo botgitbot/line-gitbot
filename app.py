@@ -69,7 +69,7 @@ def handle_message(event):
     if msg_from_user=="test": # memastikan flask berjalan dengan aman
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="flask app is running with event info and followers!"))
+            TextSendMessage(text="flask app is running with event info and followers edited!"))
     elif msg_from_user=="tesvar": # test buat nyimpen variable
         message = TextSendMessage(text="var = " + var)
         line_bot_api.reply_message(event.reply_token, message)
@@ -79,8 +79,10 @@ def handle_message(event):
 
         string_to_send = ""
         string_to_send += "tipe dari followers adalah " + type(followers) + "\n"
-        string_to_send += "asumsi dia objek, atributnya adalah" + getattr(followers) + "\n"
-        string_to_send += "followers =  " + str(followers) + "\n"
+        # string_to_send += "asumsi dia objek, atributnya adalah" + getattr(followers) + "\n"
+        # string_to_send += "followers =  " + str(followers) + "\n"
+
+        consolelog += string_to_send
 
         message = TextSendMessage(text = string_to_send)
         line_bot_api.reply_message(event.reply_token, message)
@@ -92,6 +94,8 @@ def handle_message(event):
         string_to_send += "asumsi dia objek, atributnya adalah" + getattr(event) + "\n"
         string_to_send += "event =  " + str(event) + "\n"
 
+        consolelog += string_to_send
+
         message = TextSendMessage(text = string_to_send)
         line_bot_api.reply_message(event.reply_token, message)
 
@@ -102,11 +106,11 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, message)
     elif msg_from_user == "cleardebug":
         consolelog = ""
-        message = TextSendMessage(text = consolelog)
+        message = TextSendMessage(text = "consolelog is cleared")
         line_bot_api.reply_message(event.reply_token, message)
     else: # kalau messagenya != "test", nyimpen text ke variable var
         var=msg_from_user
-        message = TextSendMessage(text="berhasil menyimpan" + var + "!")
+        message = TextSendMessage(text="berhasil menyimpan " + var + "!")
         line_bot_api.reply_message(event.reply_token, message)
 
 
