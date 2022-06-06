@@ -69,20 +69,30 @@ def handle_message(event):
     if msg_from_user=="test": # memastikan flask berjalan dengan aman
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="flask app is running2!"))
+            TextSendMessage(text="flask app is running with event info and followers!"))
     elif msg_from_user=="tesvar": # test buat nyimpen variable
         message = TextSendMessage(text="var = " + var)
         line_bot_api.reply_message(event.reply_token, message)
 
     elif msg_from_user == "followers":
         followers = line_bot_api.get_followers_ids()
-        message = TextSendMessage(text = str(followers))
+
+        string_to_send = ""
+        string_to_send += "tipe dari followers adalah " + type(followers) + "\n"
+        string_to_send += "asumsi dia objek, atributnya adalah" + getattr(followers) + "\n"
+        string_to_send += "followers =  " + str(followers) + "\n"
+
+        message = TextSendMessage(text = string_to_send)
         line_bot_api.reply_message(event.reply_token, message)
+
     elif msg_from_user == "eventinfo":
-        message = TextSendMessage(text="isi event adalah")
-        line_bot_api.reply_message(event.reply_token, message)
-        
-        message = TextSendMessage(text=str(event))
+         
+        string_to_send = ""
+        string_to_send += "tipe dari event adalah " + type(event) + "\n"
+        string_to_send += "asumsi dia objek, atributnya adalah" + getattr(event) + "\n"
+        string_to_send += "event =  " + str(event) + "\n"
+
+        message = TextSendMessage(text = string_to_send)
         line_bot_api.reply_message(event.reply_token, message)
 
 
