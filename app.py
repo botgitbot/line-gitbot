@@ -53,7 +53,7 @@ var="default"
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-
+    global var
     # get message yang diketikin sama user. simpen ke dalem variable msg_from_user
     msg_from_user = event.message.text
     
@@ -63,7 +63,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text="flask app is running!"))
     elif msg_from_user=="tesvar": # test buat nyimpen variable
-        message = TextSendMessage(text=var)
+        message = TextSendMessage(text="var = " + var)
         line_bot_api.reply_message(event.reply_token, message)
     else: # kalau messagenya != "test", nyimpen text ke variable var
         var=msg_from_user
