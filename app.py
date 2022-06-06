@@ -31,6 +31,8 @@ var="default"
 
 consolelog = ""
 
+arrOfNumber = [1,2,3,4,5]
+
 
 '''
     FLASK FUNCTION
@@ -59,6 +61,7 @@ def handle_message(event):
     # KAMUS
     global var
     global consolelog
+    global arrOfNumber
 
     # ALGORITHM
     
@@ -84,7 +87,8 @@ def handle_message(event):
 
         consolelog += string_to_send
 
-        message = TextSendMessage(text = string_to_send)
+        # message = TextSendMessage(text = string_to_send)
+        message = TextSendMessage(text = followers.user_ids)
         line_bot_api.reply_message(event.reply_token, message)
 
     elif msg_from_user == "eventinfo":
@@ -100,6 +104,10 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, message)
 
 
+    elif msg_from_user == "printarray":
+        message = TextSendMessage(text = "array of number = " + arrOfNumber)
+        line_bot_api.reply_message(event.reply_token, message)
+    
     # FOR DEBUGGING PURPOSE
     elif msg_from_user == "debug":
         message = TextSendMessage(text = consolelog)
