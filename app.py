@@ -69,7 +69,7 @@ def handle_message(event):
     msg_from_user = event.message.text
     
     # do something dengan bergantung sama messsage yang di chat sama user.
-    if msg_from_user=="test": # memastikan flask berjalan dengan aman
+    if msg_from_user=="test11": # memastikan flask berjalan dengan aman
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="flask app is running with event info and followers edited with array to string!"))
@@ -90,24 +90,16 @@ def handle_message(event):
         # message = TextSendMessage(text = string_to_send)
         message = TextSendMessage(text = "user id ke 0 adalah " + followers.user_ids[0])
         line_bot_api.reply_message(event.reply_token, message)
-
+        print(followers)
     elif msg_from_user == "eventinfo":
          
-        string_to_send = ""
-        string_to_send += "tipe dari event adalah " + str(type(event)) + "\n"
-        string_to_send += "asumsi dia objek, atributnya adalah" + str(getattr(event)) + "\n"
-        string_to_send += "event =  " + str(event) + "\n"
-
-        consolelog += string_to_send
-
-        message = TextSendMessage(text = string_to_send)
-        line_bot_api.reply_message(event.reply_token, message)
+        print("EVENT", event)
 
 
     elif msg_from_user == "printarray":
         message = TextSendMessage(text = "array of number = " + str(arrOfNumber))
         line_bot_api.reply_message(event.reply_token, message)
-    
+        print(arrOfNumber)
     # FOR DEBUGGING PURPOSE
     elif msg_from_user == "debug":
         message = TextSendMessage(text = consolelog)
@@ -134,5 +126,5 @@ def handle_message(event):
 
 import os
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 8000))
     app.run(host='0.0.0.0', port=port)
