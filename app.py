@@ -14,6 +14,9 @@ from linebot.models import (
 )
 
 import requests
+import json
+from datetime import datetime
+import pytz
 
 '''
     CREATE FLASK
@@ -28,8 +31,8 @@ app = Flask(__name__)
 line_bot_api = LineBotApi('hBs3vE924/xltPVsO3ef+5Jz0Fn7nCUS7LiDlaoI9C89tMv0oha23N/BpyV4yrKmCtdP0VuBTPNuXTLjse7yGNdqSdb9+iOk9M0SHfZOhLzbcdQzB/LP4oDiEVxKz6BOp0X+lZ2noXKdwvY/Pj44BwdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('f85e13929825bf9df787c225af107155')
 
-repo = ""
-username = ""
+repo = "test-line-bot"
+username = "addinnabilal"
 
 '''
     FLASK FUNCTION
@@ -83,13 +86,13 @@ def handle_message(event):
         username = msg_from_user[2:]
         message = TextSendMessage(text = "username: " + username)
         line_bot_api.reply_message(event.reply_token, message)
-    elif msg_from_user == "getcommit":
-        url = 'https://api.github.com/repos/' + username + '/' + repo + '/commits'
-        print("url: " + url)
-        response = requests.get(url)
-        print("response:", response)
-        string_to_send = "ada " + len(response) + " jumlah commit di repo " + repo + "!"
-        message = TextSendMessage(text=string_to_send)
+    elif msg_from_user == "getevents":
+        results = getNewEvents(repo, username)
+        print("result yg baru:")
+        for result in results:
+            print(result["commit"]["committer"]["name"] + " melakukan " + result["commit"]["message"] + " pada waktu " + result["commit"]["committer"]["date"])
+
+        message = TextSendMessage(text="cek console!")
         line_bot_api.reply_message(event.reply_token, message)
     else: 
         message = TextSendMessage(text="bukan command khusus!")
@@ -100,21 +103,37 @@ def handle_message(event):
     HELPER FUNCTION
 '''
 
-def getNewCommit(repo_id):
-    # repo_id is identifier buat 'repo yang mana'
-    # return array of new commit. kalo ga ada, return empty array
-    pass
+def getNewEvents(repo, username):
+    # repo sama username buat ngeidentifikasi repo yang mana yang mo disentuh
+    # return array of new event. kalo ga ada, return empty array
+    url = 'https://api.github.com/repos/' + username + '/' + repo + '/commits'
+    print("url: " + url)
+    res_json = requests.get(url)
+    res_dicts = json.loads(res_json.text)
+    print("banyak event sampe saat ini:", len(res_dicts))
+    start_time = datetime.now(pytz.utc)
+    
+    print("waktu sekarang", start_time)
+    # iterasi setiap response, jika ada response yang dibuat < 5 menit terakhir, add to results
+    results = []
+    for res in res_dicts:
+        print("event di waktu:" + res["commit"]["committer"]["date"])
+        # ambil waktu dari res
+        #  "created_at": "2022-05-25T05:58:32Z"
+        event_time = datetime.strptime( res["commit"]["committer"]["date"], '%Y-%m-%dT%H:%M:%SZ')
+        diff = start_time - event_time
+        print("diff.total_seconds() = ")
+        print(diff.total_seconds())
+        if (diff.total_seconds() <= 600):
+            print("diff:" + str(diff))
+            results.append(res)
+    return results
+    
 
 
-'''
-    RUN FLASK APP
-'''
 
-import os
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 8000))
-    app.run(host='0.0.0.0', port=port)
 
+print("testing")
 
 
 
@@ -133,8 +152,20 @@ if __name__ == "__main__":
 
 
 # scheduler = BackgroundScheduler()
-# scheduler.add_job(func=print_date_time, trigger="interval", seconds=60)
+
+# scheduler.add_job(func=print_date_time, trigger="interval", seconds=10)
+
 # scheduler.start()
 
 # # Shut down the scheduler when exiting the app
 # atexit.register(lambda: scheduler.shutdown())
+print("testing2")
+
+'''
+    RUN FLASK APP
+'''
+
+import os
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host='0.0.0.0', port=port)

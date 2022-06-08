@@ -3,6 +3,9 @@ din, todo yang kmaren bikin itu dimana? kok gk masuk sini
 - rapiin penamaan branch
 - set deadline
 
+1. 5 menit sekali
+2. send ke user with right text
+3. lebih dari 1 orang
 eventinfo: 
 {
     message": {"id": "16227844848299", "text": "eventinfo", "type": "text"}, 
