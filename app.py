@@ -32,14 +32,11 @@ app = Flask(__name__)
 
 line_bot_api = LineBotApi('hBs3vE924/xltPVsO3ef+5Jz0Fn7nCUS7LiDlaoI9C89tMv0oha23N/BpyV4yrKmCtdP0VuBTPNuXTLjse7yGNdqSdb9+iOk9M0SHfZOhLzbcdQzB/LP4oDiEVxKz6BOp0X+lZ2noXKdwvY/Pj44BwdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('f85e13929825bf9df787c225af107155')
-interlude = 5
-repo = "test-line-bot"
-username = "addinnabilal"
+interlude = 10
 
-followersData = {
-    "U195dcbc6b51ab6056d2f9a9c5dfde093":
-        {"repo": "test-line-bot", "username": "addinnabilal"},
-}
+followersData = {}
+    # "U195dcbc6b51ab6056d2f9a9c5dfde093":
+    #     {"repo": "test-line-bot", "username": "addinnabilal"},
 
 '''
     FLASK FUNCTION
@@ -66,8 +63,6 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # KAMUS
-    global var
-    global arrOfNumber
     global repo
     global username
 
@@ -82,25 +77,18 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text="coba github api!"))
 
-    elif msg_from_user[0] == "!" and msg_from_user[1] == "r": # catet repo 
-        # karakter selanjutnya adalah reponya
-        repo = msg_from_user[2:]
-        message = TextSendMessage(text = "repo:"+ repo)
-        line_bot_api.reply_message(event.reply_token, message)
-    
-    elif msg_from_user[0] == "!" and msg_from_user[1] == "u": # catet username
-        # karakter selanjutnya adalah username
-        username = msg_from_user[2:]
-        message = TextSendMessage(text = "username: " + username)
-        line_bot_api.reply_message(event.reply_token, message)
-    elif msg_from_user == "getevents":
-        results = getNewEvents(repo, username)
-        print("result yg baru:")
-        for result in results:
-            print(result["commit"]["committer"]["name"] + " melakukan " + result["commit"]["message"] + " pada waktu " + result["commit"]["committer"]["date"])
+    elif msg_from_user[0] == "!": # catet username dan repo
+        if msg_from_user[1:].find("/") != -1:
+            username = msg_from_user[1:msg_from_user.find("/")]
+            repo = msg_from_user[msg_from_user.find("/")+1:]
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="username: " + username + "\nrepo: " + repo)) 
 
-        message = TextSendMessage(text="cek console!")
-        line_bot_api.reply_message(event.reply_token, message)
+    
+            followers_id = event.source.user_id
+            followersData[followers_id] = {"repo": repo, "username": username}
+            
     else: 
         message = TextSendMessage(text="bukan command khusus!")
         line_bot_api.reply_message(event.reply_token, message)
@@ -111,10 +99,11 @@ def handle_message(event):
 '''
 def checkAllFollowersRepo():
     global followersData
-    for follower_id in followersData:
-        # print("follower id: " + follower_id)
-        # print("repo: " + followersData[follower_id]["repo"])
-        # print("username: " + followersData[follower_id]["username"])
+    follower_id_arr = list(followersData.keys())
+    for follower_id in follower_id_arr:
+        print("follower id: " + follower_id)
+        print("repo: " + followersData[follower_id]["repo"])
+        print("username: " + followersData[follower_id]["username"])
         results = getNewEvents(followersData[follower_id]["repo"], followersData[follower_id]["username"])
         if(len(results) != 0):
             print("ada event baru")
@@ -129,13 +118,12 @@ def checkAllFollowersRepo():
 def chatToFollower(follower_id, string_to_send):
     line_bot_api.push_message(follower_id, TextSendMessage(text=string_to_send))
 
-    
 
 def getNewEvents(repo, username):
     # repo sama username buat ngeidentifikasi repo yang mana yang mo disentuh
     # return array of new event. kalo ga ada, return empty array
     url = 'https://api.github.com/repos/' + username + '/' + repo + '/commits'
-    print("url: " + url)
+    # print("url: " + url)
     headers = {'Authorization': 'token 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'}
     res_json = requests.get(url, headers=headers)
     res_dicts = json.loads(res_json.text)
@@ -146,9 +134,9 @@ def getNewEvents(repo, username):
     # iterasi setiap response, jika ada response yang dibuat < 5 menit terakhir, add to results
     results = []
     for res in res_dicts:
-        print("res")
-        print(res)
-        print("event di waktu:" + res["commit"]["committer"]["date"])
+        # print("res")
+        # print(res)
+        # print("event di waktu:" + res["commit"]["committer"]["date"])
         # ambil waktu dari res
         #  "created_at": "2022-05-25T05:58:32Z"
         event_time = datetime.strptime(res["commit"]["committer"]["date"], '%Y-%m-%dT%H:%M:%SZ')
@@ -159,20 +147,11 @@ def getNewEvents(repo, username):
             print("ada commit baru!")
             results.append(res)
     return results
-    
-
-
 
 
 '''
     FUNCTION TO RUN EVERY MINUTE
 '''
-
-
-
-
-def print_date_time():
-    print("testing")
 
 
 scheduler = BackgroundScheduler()
