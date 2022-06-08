@@ -17,6 +17,8 @@ import requests
 import json
 from datetime import datetime
 import pytz
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
 
 '''
     CREATE FLASK
@@ -111,7 +113,7 @@ def getNewEvents(repo, username):
     res_json = requests.get(url)
     res_dicts = json.loads(res_json.text)
     print("banyak event sampe saat ini:", len(res_dicts))
-    start_time = datetime.now(pytz.utc)
+    start_time = datetime.now(pytz.utc).replace(tzinfo=None) 
     
     print("waktu sekarang", start_time)
     # iterasi setiap response, jika ada response yang dibuat < 5 menit terakhir, add to results
@@ -120,11 +122,11 @@ def getNewEvents(repo, username):
         print("event di waktu:" + res["commit"]["committer"]["date"])
         # ambil waktu dari res
         #  "created_at": "2022-05-25T05:58:32Z"
-        event_time = datetime.strptime( res["commit"]["committer"]["date"], '%Y-%m-%dT%H:%M:%SZ')
+        event_time = datetime.strptime(res["commit"]["committer"]["date"], '%Y-%m-%dT%H:%M:%SZ')
         diff = start_time - event_time
         print("diff.total_seconds() = ")
         print(diff.total_seconds())
-        if (diff.total_seconds() <= 600):
+        if (diff.total_seconds() <= 300):
             print("diff:" + str(diff))
             results.append(res)
     return results
@@ -141,24 +143,21 @@ print("testing")
     FUNCTION TO RUN EVERY MINUTE
 '''
 
-# import time
-# import atexit
-
-# from apscheduler.schedulers.background import BackgroundScheduler
 
 
-# def print_date_time():
-#     print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+
+def print_date_time():
+    print("testing")
 
 
-# scheduler = BackgroundScheduler()
+scheduler = BackgroundScheduler()
 
-# scheduler.add_job(func=print_date_time, trigger="interval", seconds=10)
+scheduler.add_job(func=print_date_time, trigger="interval", seconds=1)
 
-# scheduler.start()
+scheduler.start()
 
-# # Shut down the scheduler when exiting the app
-# atexit.register(lambda: scheduler.shutdown())
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
 print("testing2")
 
 '''
