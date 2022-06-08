@@ -1,0 +1,4 @@
+din, todo yang kmaren bikin itu dimana? kok gk masuk sini
+- ini link buat ngambil data commit https://api.github.com/repos/christojeffrey/puzzle-solver/commits. blom tau apakah ini udah ngecover yg private juga ato public repo tok
+- rapiin penamaan branch
+- set deadline
