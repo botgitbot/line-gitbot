@@ -32,9 +32,14 @@ app = Flask(__name__)
 
 line_bot_api = LineBotApi('hBs3vE924/xltPVsO3ef+5Jz0Fn7nCUS7LiDlaoI9C89tMv0oha23N/BpyV4yrKmCtdP0VuBTPNuXTLjse7yGNdqSdb9+iOk9M0SHfZOhLzbcdQzB/LP4oDiEVxKz6BOp0X+lZ2noXKdwvY/Pj44BwdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('f85e13929825bf9df787c225af107155')
-
+interlude = 5
 repo = "test-line-bot"
 username = "addinnabilal"
+
+followersData = {
+    "U195dcbc6b51ab6056d2f9a9c5dfde093":
+        {"repo": "test-line-bot", "username": "addinnabilal"},
+}
 
 '''
     FLASK FUNCTION
@@ -104,38 +109,58 @@ def handle_message(event):
 '''
     HELPER FUNCTION
 '''
+def checkAllFollowersRepo():
+    global followersData
+    for follower_id in followersData:
+        # print("follower id: " + follower_id)
+        # print("repo: " + followersData[follower_id]["repo"])
+        # print("username: " + followersData[follower_id]["username"])
+        results = getNewEvents(followersData[follower_id]["repo"], followersData[follower_id]["username"])
+        if(len(results) != 0):
+            print("ada event baru")
+            for result in results:
+                string_to_chat = result["commit"]["committer"]["name"] + " melakukan " + result["commit"]["message"] + " pada waktu " + result["commit"]["committer"]["date"]
+                print(string_to_chat)
+                chatToFollower(follower_id, string_to_chat)
+        else:
+            print("tidak ada event baru")
+            # chatToFollower(follower_id, "tidak ada event baru")
+
+def chatToFollower(follower_id, string_to_send):
+    line_bot_api.push_message(follower_id, TextSendMessage(text=string_to_send))
+
+    
 
 def getNewEvents(repo, username):
     # repo sama username buat ngeidentifikasi repo yang mana yang mo disentuh
     # return array of new event. kalo ga ada, return empty array
     url = 'https://api.github.com/repos/' + username + '/' + repo + '/commits'
     print("url: " + url)
-    res_json = requests.get(url)
+    headers = {'Authorization': 'token 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'}
+    res_json = requests.get(url, headers=headers)
     res_dicts = json.loads(res_json.text)
-    print("banyak event sampe saat ini:", len(res_dicts))
+    # print("banyak event sampe saat ini:", len(res_dicts))
     start_time = datetime.now(pytz.utc).replace(tzinfo=None) 
     
-    print("waktu sekarang", start_time)
+    # print("waktu sekarang", start_time)
     # iterasi setiap response, jika ada response yang dibuat < 5 menit terakhir, add to results
     results = []
     for res in res_dicts:
+        print("res")
+        print(res)
         print("event di waktu:" + res["commit"]["committer"]["date"])
         # ambil waktu dari res
         #  "created_at": "2022-05-25T05:58:32Z"
         event_time = datetime.strptime(res["commit"]["committer"]["date"], '%Y-%m-%dT%H:%M:%SZ')
         diff = start_time - event_time
-        print("diff.total_seconds() = ")
-        print(diff.total_seconds())
-        if (diff.total_seconds() <= 300):
-            print("diff:" + str(diff))
+        # print("diff.total_seconds() = ")
+        # print(diff.total_seconds())
+        if (diff.total_seconds() <= interlude):
+            print("ada commit baru!")
             results.append(res)
     return results
     
 
-
-
-
-print("testing")
 
 
 
@@ -152,13 +177,12 @@ def print_date_time():
 
 scheduler = BackgroundScheduler()
 
-scheduler.add_job(func=print_date_time, trigger="interval", seconds=1)
+scheduler.add_job(func=checkAllFollowersRepo, trigger="interval", seconds = interlude)
 
 scheduler.start()
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
-print("testing2")
 
 '''
     RUN FLASK APP
