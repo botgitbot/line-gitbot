@@ -13,6 +13,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
+import requests
 
 '''
     CREATE FLASK
@@ -27,7 +28,8 @@ app = Flask(__name__)
 line_bot_api = LineBotApi('hBs3vE924/xltPVsO3ef+5Jz0Fn7nCUS7LiDlaoI9C89tMv0oha23N/BpyV4yrKmCtdP0VuBTPNuXTLjse7yGNdqSdb9+iOk9M0SHfZOhLzbcdQzB/LP4oDiEVxKz6BOp0X+lZ2noXKdwvY/Pj44BwdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('f85e13929825bf9df787c225af107155')
 
-
+repo = ""
+username = ""
 
 '''
     FLASK FUNCTION
@@ -56,6 +58,8 @@ def handle_message(event):
     # KAMUS
     global var
     global arrOfNumber
+    global repo
+    global username
 
     # ALGORITHM
     
@@ -63,32 +67,30 @@ def handle_message(event):
     msg_from_user = event.message.text
     
     # do something dengan bergantung sama messsage yang di chat sama user.
-    if msg_from_user=="test11": # memastikan flask berjalan dengan aman
+    if msg_from_user=="test": # memastikan flask berjalan dengan aman
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="flask app is running!"))
+            TextSendMessage(text="coba github api!"))
 
-    elif msg_from_user == "followers":
-        print("sebelum dapetin followers")
-        followers = line_bot_api.get_followers_ids()
-        test_result = line_bot_api.get_followers_ids()
-        print("sesudah dapetin followers")
-        print(test_result.user_ids)
-        print(test_result.next)
-        print("followers: " + str(followers))
-        message = TextSendMessage(text = "followers is printed in console")
-        line_bot_api.reply_message(event.reply_token, message)
-        print(followers)
-    elif msg_from_user == "eventinfo":
-        print("eventinfo: " + str(event))
-        message = TextSendMessage(text = "event is printed in console")
-        line_bot_api.reply_message(event.reply_token, message)
-
-
-    elif msg_from_user == "printarray":
-        message = TextSendMessage(text = "array of number = " + str(["1","2","3","4","5"]))
+    elif msg_from_user[0] == "!" and msg_from_user[1] == "r": # catet repo 
+        # karakter selanjutnya adalah reponya
+        repo = msg_from_user[2:]
+        message = TextSendMessage(text = "repo:"+ repo)
         line_bot_api.reply_message(event.reply_token, message)
     
+    elif msg_from_user[0] == "!" and msg_from_user[1] == "u": # catet username
+        # karakter selanjutnya adalah username
+        username = msg_from_user[2:]
+        message = TextSendMessage(text = "username: " + username)
+        line_bot_api.reply_message(event.reply_token, message)
+    elif msg_from_user == "getcommit":
+        url = 'https://api.github.com/repos/' + username + '/' + repo + '/commits'
+        print("url: " + url)
+        response = requests.get(url)
+        print("response:", response)
+        string_to_send = "ada " + len(response) + " jumlah commit di repo " + repo + "!"
+        message = TextSendMessage(text=string_to_send)
+        line_bot_api.reply_message(event.reply_token, message)
     else: 
         message = TextSendMessage(text="bukan command khusus!")
         line_bot_api.reply_message(event.reply_token, message)

@@ -2,3 +2,20 @@ din, todo yang kmaren bikin itu dimana? kok gk masuk sini
 - ini link buat ngambil data commit https://api.github.com/repos/christojeffrey/puzzle-solver/commits. blom tau apakah ini udah ngecover yg private juga ato public repo tok
 - rapiin penamaan branch
 - set deadline
+
+eventinfo: 
+{
+    message": {"id": "16227844848299", "text": "eventinfo", "type": "text"}, 
+    "mode": "active",
+    "replyToken": "26f0b93783e042f9aa825b384ce6bf41", 
+    "source": {"type": "user", "userId": "U195dcbc6b51ab6056d2f9a9c5dfde093"},
+    "timestamp": 1654699905312, 
+    "type": "message"
+}
+
+
+
+curl -v -X GET https://api.line.me/v2/bot/followers/ids \
+-H 'Authorization: Bearer hBs3vE924/xltPVsO3ef+5Jz0Fn7nCUS7LiDlaoI9C89tMv0oha23N/BpyV4yrKmCtdP0VuBTPNuXTLjse7yGNdqSdb9+iOk9M0SHfZOhLzbcdQzB/LP4oDiEVxKz6BOp0X+lZ2noXKdwvY/Pj44BwdB04t89/1O/w1cDnyilFU=' \
+-d 'limit=1000' \
+-G
