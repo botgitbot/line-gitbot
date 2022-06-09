@@ -65,6 +65,7 @@ def handle_message(event):
     # KAMUS
     global repo
     global username
+    global access_token
 
     # ALGORITHM
     
@@ -77,17 +78,19 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text="coba github api!"))
 
-    elif msg_from_user[0] == "!": # catet username dan repo
+    elif msg_from_user[0] == "!": # catet username, repo, and access token. Format ![repo]/[username]:[access_token]
         if msg_from_user[1:].find("/") != -1:
             username = msg_from_user[1:msg_from_user.find("/")]
-            repo = msg_from_user[msg_from_user.find("/")+1:]
+            repo = msg_from_user[msg_from_user.find("/")+1:msg_from_user.find(":")]
+            # catat access token
+            access_token = msg_from_user[msg_from_user.find(":")+1:]
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="username: " + username + "\nrepo: " + repo)) 
+                TextSendMessage(text="username: " + username + "\nrepo: " + repo + "\naccess token: " + access_token)) 
 
     
             followers_id = event.source.user_id
-            followersData[followers_id] = {"repo": repo, "username": username}
+            followersData[followers_id] = {"repo": repo, "username": username, "access_token": access_token}
             
     else: 
         message = TextSendMessage(text="bukan command khusus!")
@@ -104,7 +107,7 @@ def checkAllFollowersRepo():
         print("follower id: " + follower_id)
         print("repo: " + followersData[follower_id]["repo"])
         print("username: " + followersData[follower_id]["username"])
-        results = getNewEvents(followersData[follower_id]["repo"], followersData[follower_id]["username"])
+        results = getNewEvents(followersData[follower_id]["repo"], followersData[follower_id]["username"], followersData[follower_id]["access_token"])
         if(len(results) != 0):
             print("ada event baru")
             for result in results:
@@ -119,12 +122,12 @@ def chatToFollower(follower_id, string_to_send):
     line_bot_api.push_message(follower_id, TextSendMessage(text=string_to_send))
 
 
-def getNewEvents(repo, username):
+def getNewEvents(repo, username, access_token):
     # repo sama username buat ngeidentifikasi repo yang mana yang mo disentuh
     # return array of new event. kalo ga ada, return empty array
     url = 'https://api.github.com/repos/' + username + '/' + repo + '/commits'
     # print("url: " + url)
-    headers = {'Authorization': 'token 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'}
+    headers = {'Authorization': 'token ' + access_token}
     res_json = requests.get(url, headers=headers)
     res_dicts = json.loads(res_json.text)
     # print("banyak event sampe saat ini:", len(res_dicts))
