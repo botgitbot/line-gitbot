@@ -1,6 +1,7 @@
 '''
     IMPORT
 '''
+from cmath import e
 from flask import Flask, request, abort
 
 from linebot import (
@@ -36,7 +37,7 @@ interlude = 10
 
 followersData = {}
     # "U195dcbc6b51ab6056d2f9a9c5dfde093":
-    #     {"repo": "test-line-bot", "username": "addinnabilal"},
+    #     {"repos": ["test-line-bot"], "username": "addinnabilal", "access_token": "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"}},
 
 '''
     FLASK FUNCTION
@@ -71,15 +72,16 @@ def handle_message(event):
     
     # get message yang diketikin sama user. simpen ke dalem variable msg_from_user
     msg_from_user = event.message.text
-    
+    followers_id = event.source.user_id
+
     # do something dengan bergantung sama messsage yang di chat sama user.
     if msg_from_user=="test": # memastikan flask berjalan dengan aman
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="coba github api!"))
 
-    elif msg_from_user[0] == "!": # catet username, repo, and access token. Format ![repo]/[username]:[access_token]
-        if msg_from_user[1:].find("/") != -1:
+    elif msg_from_user[0] == "!": # catet username, repo, and access token. Format ![repo]/[username]:[access_token] untuk pertama kali
+        if msg_from_user[1:].find("/") != -1 and msg_from_user[1:].find(":") != -1:
             username = msg_from_user[1:msg_from_user.find("/")]
             repo = msg_from_user[msg_from_user.find("/")+1:msg_from_user.find(":")]
             # catat access token
@@ -88,10 +90,12 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text="username: " + username + "\nrepo: " + repo + "\naccess token: " + access_token)) 
 
-    
-            followers_id = event.source.user_id
-            followersData[followers_id] = {"repo": repo, "username": username, "access_token": access_token}
-            
+            followersData[followers_id] = {"repos": [repo], "username": username, "access_token": access_token}
+
+    elif msg_from_user[0] ==  "+": #catat tambahan repo
+        if len(followersData[followers_id]["repos"]) != 0: #asumsi data user sudah terdefinisi sebelumnya
+            followersData[followers_id]["repos"].append(msg_from_user[1:])
+
     else: 
         message = TextSendMessage(text="bukan command khusus!")
         line_bot_api.reply_message(event.reply_token, message)
@@ -105,18 +109,20 @@ def checkAllFollowersRepo():
     follower_id_arr = list(followersData.keys())
     for follower_id in follower_id_arr:
         print("follower id: " + follower_id)
-        print("repo: " + followersData[follower_id]["repo"])
         print("username: " + followersData[follower_id]["username"])
-        results = getNewEvents(followersData[follower_id]["repo"], followersData[follower_id]["username"], followersData[follower_id]["access_token"])
-        if(len(results) != 0):
-            print("ada event baru")
-            for result in results:
-                string_to_chat = result["commit"]["committer"]["name"] + " melakukan " + result["commit"]["message"] + " pada waktu " + result["commit"]["committer"]["date"]
-                print(string_to_chat)
-                chatToFollower(follower_id, string_to_chat)
-        else:
-            print("tidak ada event baru")
-            # chatToFollower(follower_id, "tidak ada event baru")
+        print("access token: " + followersData[follower_id]["access_token"])
+        for repo in followersData[follower_id]["repos"]:
+            print("repo: " + repo)
+            results = getNewEvents(repo, followersData[follower_id]["username"], followersData[follower_id]["access_token"])
+            if(len(results) != 0):
+                print("ada event baru")
+                for result in results:
+                    string_to_chat = "[" + repo + "] " +  result["commit"]["committer"]["name"] + " melakukan " + result["commit"]["message"] + " pada waktu " + result["commit"]["committer"]["date"]
+                    print(string_to_chat)
+                    chatToFollower(follower_id, string_to_chat)
+            else:
+                print("tidak ada event baru")
+                # chatToFollower(follower_id, "tidak ada event baru")
 
 def chatToFollower(follower_id, string_to_send):
     line_bot_api.push_message(follower_id, TextSendMessage(text=string_to_send))
