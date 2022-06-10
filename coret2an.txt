@@ -3,10 +3,12 @@ din, todo yang kmaren bikin itu dimana? kok gk masuk sini
 - rapiin penamaan branch
 - set deadline
 
-1. 5 menit sekali
-2. send ke user with right text
-3. lebih dari 1 orang
-4. retrieve commits from local push (somehow baru bisa yang update dari browser)
+- 5 menit sekali
+- send ke user with right text
+- lebih dari 1 orang
+- retrieve commits from local push (somehow baru bisa yang update dari browser)
+- hilangin message awal
+
 eventinfo: 
 {
     message": {"id": "16227844848299", "text": "eventinfo", "type": "text"}, 
