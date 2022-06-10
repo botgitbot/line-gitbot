@@ -8,7 +8,7 @@ din, todo yang kmaren bikin itu dimana? kok gk masuk sini
 - lebih dari 1 orang
 - retrieve commits from local push (somehow baru bisa yang update dari browser)
 - hilangin message awal
-
+- mungkin bisa bikin module buat utils. keknya itu lebih rapi urusan import2 an
 eventinfo: 
 {
     message": {"id": "16227844848299", "text": "eventinfo", "type": "text"}, 

@@ -1,48 +1,39 @@
-'''
-    IMPORT
-'''
-from cmath import e
 from flask import Flask, request, abort
 
 from linebot import (
-    LineBotApi, WebhookHandler
+ WebhookHandler
 )
 from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage,
 )
 
 
-import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
+
 
 
 from eventBasedFunctions import replyBasedOnMessage
-from routineFunctions import checkNewEventInRepos
+from routineFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
-from globalVariable import database
-'''
-    CREATE FLASK
-'''
+from globalVariable import (
+    interlude,
+    port
+)
+
+#    CREATE FLASK
+
 
 app = Flask(__name__)
 
-'''
-    GLOBAL VARIABLE
-'''
+#   GLOBAL VARIABLE
+
 
 handler = WebhookHandler('f85e13929825bf9df787c225af107155')
-interlude = 10
 
-followersData = {}
-    # "U195dcbc6b51ab6056d2f9a9c5dfde093":
-    #     {"repos": ["test-line-bot"], "username": "addinnabilal", "access_token": "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"}},
+#    FLASK FUNCTION
 
-'''
-    FLASK FUNCTION
-'''
 
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
@@ -64,47 +55,34 @@ def callback():
 # handle message
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    # KAMUS
-    global repo
-    global username
-    global access_token
-
-    # ALGORITHM
-    
-    # get message yang diketikin sama user. simpen ke dalem variable msg_from_user
+    # 'strip down' event, to get only the data we need
     msg_from_user = event.message.text
     followers_id = event.source.user_id
+    reply_token = event.reply_token
 
-    # do something dengan bergantung sama messsage yang di chat sama user.
-
-    # panggil evenbased function
-    replyBasedOnMessage(msg_from_user, followers_id)
-
-
-'''
-    HELPER FUNCTION
-'''
+    # call evenbased function
+    replyBasedOnMessage(msg_from_user, followers_id, reply_token)
 
 
-'''
-    FUNCTION TO RUN EVERY MINUTE
-'''
 
+#   FUNCTION TO RUN EVERY MINUTE
+
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
 
-scheduler.add_job(func=checkNewEventInRepos, trigger="interval", seconds = interlude)
+scheduler.add_job(func=checkAndSendMessageIfEventHappensInAllRepo, trigger="interval", seconds = interlude)
 
 scheduler.start()
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
 
-'''
-    RUN FLASK APP
-'''
+#    RUN FLASK APP
+
 
 import os
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 8000))
-    app.run(host='0.0.0.0', port=port)
+    portObject = int(os.environ.get('PORT', port))
+    app.run(host='0.0.0.0', port=portObject)
