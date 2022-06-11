@@ -13,7 +13,7 @@ def replyBasedOnMessage(msg_from_user,followers_id, reply_token):
             repo = msg_from_user[msg_from_user.find("/")+1:msg_from_user.find(":")]
             # catat access token
             access_token = msg_from_user[msg_from_user.find(":")+1:]
-            replyString(reply_token, text="username: " + username + "\nrepo: " + repo + "\naccess token: " + access_token)
+            replyString(reply_token, "username: " + username + "\nrepo: " + repo + "\naccess token: " + access_token)
 
             database[followers_id] = {"repos": [repo], "username": username, "access_token": access_token}
 

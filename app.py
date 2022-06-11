@@ -16,7 +16,8 @@ from routineFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
 from globalVariable import (
     interlude,
-    port
+    port,
+    config
 )
 
 #    CREATE FLASK
@@ -26,10 +27,9 @@ app = Flask(__name__)
 
 #   GLOBAL VARIABLE
 
+handler = WebhookHandler(config['LINE_CHANNEL_SECRET'])
 
-handler = WebhookHandler(os.environ.get('LINE_CHANNEL_SECRET'))
 #    FLASK FUNCTION
-print(os.environ.get('LINE_CHANNEL_SECRET'))
 
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
