@@ -3,3 +3,4 @@ line-bot-sdk
 requests
 pytz
 apscheduler
+firebase_admin
