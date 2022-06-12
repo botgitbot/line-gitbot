@@ -1,5 +1,7 @@
-# semua file gaboleh nyentuh firebase module secara langsung, harus pake fungsi yang ada di file ini
+import firebase_admin
+from firebase_admin import credentials, db
+import os
+from globalVariable import config
 
-# getData
-
-# updateData
+certificate = credentials.Certificate(config['FIREBASE_KEY_API'])
+firebaseApp = firebase_admin.initialize_app(certificate, {'databaseURL': os.environ['FIREBASE_DATABASE_URL']})

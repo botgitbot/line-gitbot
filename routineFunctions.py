@@ -20,9 +20,13 @@ def checkAndSendMessageIfEventHappensInAllRepo():
             if(len(results) != 0):
                 print("ada event baru")
                 for result in results:
-                    string_to_chat = "[" + repo + "] " +  result["commit"]["committer"]["name"] + " melakukan " + result["commit"]["message"] + " pada waktu " + result["commit"]["committer"]["date"]
-                    print(string_to_chat)
-                    sendStringToFollower(follower_id, string_to_chat)
+                    if result["type"] == "PushEvent":
+                        # {result["actor"]["login"]} pushed to branch {result["payload"]["ref"]} {result["payload"]["commits"][0]["url"]}
+                        string_to_chat = f"[{repo}] {result['actor']['login']} pushed to branch {result['payload']['ref']} with {result['payload']['size']} commits:"
+                        print(string_to_chat)
+                        for commit in result["payload"]["commits"]:
+                            string_to_chat += f"\n  - {commit['message']}"
+                        sendStringToFollower(follower_id, string_to_chat)
             else:
                 print("tidak ada event baru")
                 # chatToFollower(follower_id, "tidak ada event baru")
@@ -40,9 +44,9 @@ def filterEventsToGetNewEventsOnly(repo, username, access_token):
     results = []
     for res in responds:        
         # "2022-05-25T05:58:32Z"
-        event_time_string = res["commit"]["committer"]["date"]
+        event_time_string = res["created_at"]
 
         if(diffOfTimeLessThanEqualToInterlude(start_time, event_time_string)):
-            print("ada commit baru!")
+            print("ada event baru!")
             results.append(res)
     return results
