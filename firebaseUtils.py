@@ -13,7 +13,7 @@ from firebase_admin import credentials
 cred = credentials.Certificate("firebaseCredential.json")
 # certificate = credentials.Certificate(config['FIREBASE_KEY_API'])
 firebase_admin.initialize_app(cred,{
-    'databaseURL': os.environ['FIREBASE_DATABASE_URL']
+    'databaseURL': os.getenv("FIREBASE_DATABASE_URL")
 })
 
 
