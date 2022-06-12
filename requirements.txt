@@ -4,3 +4,5 @@ requests
 pytz
 apscheduler
 firebase_admin
+python-dotenv
+firebase-admin

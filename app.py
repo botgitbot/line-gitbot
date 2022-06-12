@@ -1,4 +1,5 @@
 from flask import Flask, request, abort
+import os
 
 from linebot import (
  WebhookHandler
@@ -10,16 +11,13 @@ from linebot.models import (
     MessageEvent, TextMessage,
 )
 
-
-
-
-
 from eventBasedFunctions import replyBasedOnMessage
 from routineFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
 from globalVariable import (
     interlude,
-    port
+    port,
+    config
 )
 
 #    CREATE FLASK
@@ -29,11 +27,9 @@ app = Flask(__name__)
 
 #   GLOBAL VARIABLE
 
-
-handler = WebhookHandler('f85e13929825bf9df787c225af107155')
+handler = WebhookHandler(config['LINE_CHANNEL_SECRET'])
 
 #    FLASK FUNCTION
-
 
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
