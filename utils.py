@@ -5,6 +5,8 @@ from datetime import datetime
 
 from globalVariable import interlude
 
+print("utils.py")
+
 def fetchFromGithub(usernameandrepo, access_token):
     url = 'https://api.github.com/repos/' + usernameandrepo +'/events'
 
