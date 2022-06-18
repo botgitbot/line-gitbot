@@ -3,11 +3,6 @@ din, todo yang kmaren bikin itu dimana? kok gk masuk sini
 - rapiin penamaan branch
 - set deadline
 
-- 5 menit sekali
-- send ke user with right text
-- lebih dari 1 orang
-- retrieve commits from local push (somehow baru bisa yang update dari browser)
-- hilangin message awal
 - mungkin bisa bikin module buat utils. keknya itu lebih rapi urusan import2 an
 eventinfo: 
 {
@@ -19,9 +14,18 @@ eventinfo:
     "type": "message"
 }
 
-
+{"message": {"id": "16249634190070", "text": "oke gabisa", "type": "text"},
+"mode": "active", "replyToken": "c61a5deda7524333a4cc5dfb3cf997cd",
+"source": {"groupId": "Ce9d64e6df998acdcff96c625cc443233", "type": "group", "userId": "U195dcbc6b51ab6056d2f9a9c5dfde093"},
+"timestamp": 1655040341713, "type": "message"}
 
 curl -v -X GET https://api.line.me/v2/bot/followers/ids \
 -H 'Authorization: Bearer hBs3vE924/xltPVsO3ef+5Jz0Fn7nCUS7LiDlaoI9C89tMv0oha23N/BpyV4yrKmCtdP0VuBTPNuXTLjse7yGNdqSdb9+iOk9M0SHfZOhLzbcdQzB/LP4oDiEVxKz6BOp0X+lZ2noXKdwvY/Pj44BwdB04t89/1O/w1cDnyilFU=' \
 -d 'limit=1000' \
 -G
+
+todo:
+1. enable in group
+2. Implement reply message based on command yang '!addrepo' etc
+3. Add other functionalities: pull req, merge, comments (tbd)
+4. Handle all possible user-error
