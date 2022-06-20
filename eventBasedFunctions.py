@@ -1,5 +1,6 @@
 
-from globalVariable import database
+from firebaseUtils import setDatabaseFromFirebase
+import globalVariable
 from lineUtils import replyString
 # udah gada campur tangan sama flask
 def replyBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
@@ -20,10 +21,13 @@ def replyBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
             replyString(reply_token, "username: " + username + "\nrepo: " + repo + "\naccess token: " + access_token)
             user_and_repo_name_as_key = username + "/" + repo
 
-            if (group_id in list(database.keys())):
-                database[group_id][user_and_repo_name_as_key] = {"access_token": access_token}
+            if (group_id in list(globalVariable.database.keys())):
+                globalVariable.database[group_id][user_and_repo_name_as_key] = {"access_token": access_token}
             else:
-                database[group_id] = {user_and_repo_name_as_key: {"access_token": access_token}}
+                globalVariable.database[group_id] = {user_and_repo_name_as_key: {"access_token": access_token}}
+            
+            # set to firebase
+            setDatabaseFromFirebase()
 
     elif msg_from_user == '!help': #help
         replyString(reply_token, "add first repo with `!addrepo [owner]/[repo]:[access_token]`\nhelp with `!help`")

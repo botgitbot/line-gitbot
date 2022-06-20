@@ -1,3 +1,6 @@
+lesson learned, begitu suatu modul diimport, dia bakal di run. gk peduli ntah itu keywordnya from atau import langsung.
+
+
 din, todo yang kmaren bikin itu dimana? kok gk masuk sini
 - ini link buat ngambil data commit https://api.github.com/repos/christojeffrey/puzzle-solver/commits. blom tau apakah ini udah ngecover yg private juga ato public repo tok
 - rapiin penamaan branch
