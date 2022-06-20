@@ -53,12 +53,17 @@ def callback():
 def handle_message(event):
     # 'strip down' event, to get only the data we need
     msg_from_user = event.message.text
-    followers_id = event.source.user_id
     reply_token = event.reply_token
+    source_type = event.source.type
+    source_id = event.source.user_id
+    followers_id = event.source.user_id
 
-    # call evenbased function
-    replyBasedOnMessage(msg_from_user, followers_id, reply_token)
+    if (source_type == 'user'):
+        source_id = event.source.user_id
+    elif (event.source.type == 'group'):
+        source_id = event.source.group_id
 
+    replyBasedOnMessage(msg_from_user, source_type, source_id, reply_token)
 
 
 #   FUNCTION TO RUN EVERY MINUTE
