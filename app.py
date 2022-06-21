@@ -1,6 +1,15 @@
+# IMPORT KAMUS(env, config, globalvariable)
+from dotenv import load_dotenv
+load_dotenv()
+# now you can use value from .env with from `os.environ` or `os.getenv`
+import config 
+import globalVariable
+globalVariable.initialize()
+
+
+# IMPORT SUBPROGRAM
 from flask import Flask, request, abort
 import os
-
 from linebot import (
  WebhookHandler
 )
@@ -8,29 +17,28 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage,
+    MessageEvent,
+    TextMessage,
 )
 
 from eventBasedFunctions import replyBasedOnMessage
 from routineFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
-from globalVariable import (
-    interlude,
-    port,
-    config
-)
 
-#    CREATE FLASK
+from firebaseUtils import setDatabaseFromFirebase
 
 
+#    CREATE FLASK APP
 app = Flask(__name__)
 
-#   GLOBAL VARIABLE
+# SETUP LINE HANDLER
+handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
-handler = WebhookHandler(config['LINE_CHANNEL_SECRET'])
+# SETUP DATABASE
+# when the app is first run, the database should be matching what's on firebase
+setDatabaseFromFirebase()
 
 #    FLASK FUNCTION
-
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -45,8 +53,6 @@ def callback():
     except InvalidSignatureError:
         abort(400)
     return 'OK'
-
-
 
 # handle message
 @handler.add(MessageEvent, message=TextMessage)
@@ -67,23 +73,18 @@ def handle_message(event):
 
 
 #   FUNCTION TO RUN EVERY MINUTE
-
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
-
-scheduler.add_job(func=checkAndSendMessageIfEventHappensInAllRepo, trigger="interval", seconds = interlude)
-
+scheduler.add_job(func=checkAndSendMessageIfEventHappensInAllRepo, trigger="interval", seconds = config.INTERLUDE)
 scheduler.start()
-
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
 
+
 #    RUN FLASK APP
-
-
 import os
 if __name__ == "__main__":
-    portObject = int(os.environ.get('PORT', port))
+    portObject = int(os.environ.get('PORT', config.PORT))
     app.run(host='0.0.0.0', port=portObject)
