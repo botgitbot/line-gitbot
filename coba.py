@@ -15,6 +15,7 @@ globalVariable.initialize()
 setDatabaseFromFirebase()
 print("database sekarang")
 print(globalVariable.database)
+print(type(globalVariable.database))
 
 print("coba diganti")
 globalVariable.database = {"DIGANTI": {"asdf": {"access_token": "asdf"}}}
