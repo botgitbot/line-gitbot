@@ -39,6 +39,15 @@ handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 setDatabaseFromFirebase()
 
 #    FLASK FUNCTION
+
+# /
+@app.route('/')
+def hello_world():
+    return 'Hello World!' + os.getenv('TEST_ENV')
+
+
+
+
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():
