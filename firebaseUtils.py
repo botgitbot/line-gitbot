@@ -11,7 +11,7 @@ fc = {
     "type": os.getenv("FIREBASE_CREDENTIAL_TYPE"),
     "project_id": os.getenv("FIREBASE_CREDENTIAL_PROJECT_ID"),
     "private_key_id": os.getenv("FIREBASE_CREDENTIAL_PRIVATE_KEY_ID"),
-    "private_key": os.getenv("FIREBASE_CREDENTIAL_PRIVATE_KEY"),
+    "private_key": os.getenv("FIREBASE_CREDENTIAL_PRIVATE_KEY").replace('\\n', '\n'),
     "client_email": os.getenv("FIREBASE_CREDENTIAL_CLIENT_EMAIL"),
     "client_id": os.getenv("FIREBASE_CREDENTIAL_CLIENT_ID"),
     "auth_uri": os.getenv("FIREBASE_CREDENTIAL_AUTH_URI"),
