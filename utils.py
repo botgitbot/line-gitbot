@@ -16,8 +16,10 @@ def fetchFromGithub(usernameandrepo, access_token):
 def diffOfTimeLessThanEqualToInterlude(start_time, event_time_string):
     event_time = datetime.strptime(event_time_string, '%Y-%m-%dT%H:%M:%SZ')
     diff = start_time - event_time
-    print("beda waktu", end=": ")
-    print(diff.total_seconds())
+    # print recent
+    if(diff.total_seconds() <= 5*config.INTERLUDE):
+        print("beda waktu", end=": ")
+        print(diff.total_seconds())
     return diff.total_seconds() <= (config.INTERLUDE + config.TIME_TOLERANCE)
 
 def checkIfRepoAndAccessTokenValid(usernameandrepo, access_token):
