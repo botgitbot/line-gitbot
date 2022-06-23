@@ -2,6 +2,7 @@
 from firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
 import globalVariable
 from lineUtils import replyString
+from utils import checkIfRepoAndAccessTokenValid
 # udah gada campur tangan sama flask
 def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
     if source_type == 'user':
@@ -90,16 +91,23 @@ def actionAddRepo(reply_token, msg_from_user, group_id):
         # user_and_repo_name_as_key = {"username": username, "repo": repo}
         print("globalVariable.database prev")
         # replyString(reply_token, "adding...")
-        print(globalVariable.database)
-        if (group_id in list(globalVariable.database.keys())):
-            globalVariable.database[group_id][user_and_repo_name_as_key] = {"access_token": access_token}
+
+        # check if the data sended is valid. try to get data from github
+        # if not valid, reply with error message
+        # if valid, add to database
+        if not checkIfRepoAndAccessTokenValid(username+"/"+repo, access_token):
+            replyString(reply_token, "invalid repo or access token")
         else:
-            globalVariable.database[group_id] = {user_and_repo_name_as_key: {"access_token": access_token}}
-        print("globalVariable.database edited")
-        print(globalVariable.database)
-        # set to firebase
-        setFirebaseFromDatabase()
-        replyString(reply_token, "successfully adding \nusername: " + username + "\nrepo: " + repo + "\naccess token: " + access_token)
+            print(globalVariable.database)
+            if (group_id in list(globalVariable.database.keys())):
+                globalVariable.database[group_id][user_and_repo_name_as_key] = {"access_token": access_token}
+            else:
+                globalVariable.database[group_id] = {user_and_repo_name_as_key: {"access_token": access_token}}
+            print("globalVariable.database edited")
+            print(globalVariable.database)
+            # set to firebase
+            setFirebaseFromDatabase()
+            replyString(reply_token, "successfully adding \nusername: " + username + "\nrepo: " + repo + "\naccess token: " + access_token)
     else:
         replyString(reply_token, "wrong format, please use\n `!addrepo [owner]/[repo]:[access_token]`")
            

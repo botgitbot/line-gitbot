@@ -20,10 +20,6 @@ fc = {
     "client_x509_cert_url": os.getenv("FIREBASE_CREDENTIAL_CLIENT_X509_CERT_URL")
 }
 
-print("fc")
-print(fc)
-
-
 
 # di firebase, satu buah project bisa terdiri atas beberapa app. kita cuman pake satu
 # once the code below this comment is run, a new app will be created. that app doesn't have to be stored in a variable. I'm not quite sure how it works underneath, but let's assume the data is stored inside the firebase admin library
