@@ -20,6 +20,8 @@ fc = {
     "client_x509_cert_url": os.getenv("FIREBASE_CREDENTIAL_CLIENT_X509_CERT_URL")
 }
 
+print("fc")
+print(fc)
 
 
 
