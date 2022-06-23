@@ -4,3 +4,4 @@
 # durasi antar routine function call dalam detik
 INTERLUDE = 10 
 PORT = 8000
+TIME_TOLERANCE = 2

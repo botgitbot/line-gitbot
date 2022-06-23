@@ -1,7 +1,7 @@
 {
   "group1id": {
-    "christojeffrey/dummy-repo": { "access_token": "adfasfasdfasda2343" },
-    "christojeffrey/dummy-repo2": { "access_token": "adfasfasdfasda2343" }
+    "christojeffrey@dummy-repo": { "access_token": "adfasfasdfasda2343" },
+    "christojeffrey@dummy-repo2": { "access_token": "adfasfasdfasda2343" }
   },
   "group2id": {}
 }

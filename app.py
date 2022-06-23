@@ -21,7 +21,7 @@ from linebot.models import (
     TextMessage,
 )
 
-from eventBasedFunctions import replyBasedOnMessage
+from eventBasedFunctions import actionBasedOnMessage
 from routineFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
 
@@ -37,8 +37,14 @@ handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 # SETUP DATABASE
 # when the app is first run, the database should be matching what's on firebase
 setDatabaseFromFirebase()
-
+print("database sekarang")
+print(globalVariable.database)
 #    FLASK FUNCTION
+
+@app.route('/', methods=['GET'])
+def hello():
+    return 'Hello World!'
+
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -69,7 +75,7 @@ def handle_message(event):
     elif (event.source.type == 'group'):
         source_id = event.source.group_id
 
-    replyBasedOnMessage(msg_from_user, source_type, source_id, reply_token)
+    actionBasedOnMessage(msg_from_user, source_type, source_id, reply_token)
 
 
 #   FUNCTION TO RUN EVERY MINUTE
