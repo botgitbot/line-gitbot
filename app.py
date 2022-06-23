@@ -41,6 +41,10 @@ print("database sekarang")
 print(globalVariable.database)
 #    FLASK FUNCTION
 
+@app.route('/', methods=['GET'])
+def hello():
+    return 'Hello World!'
+
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():
