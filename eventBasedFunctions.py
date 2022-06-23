@@ -18,13 +18,13 @@ def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
         print(msg_from_user)
 
 
-        if msg_from_user[0:9] == '!addrepo ': #intentional space behind
+        if msg_from_user[0:5] == '!add ': #intentional space behind
             actionAddRepo(reply_token, msg_from_user, followers_id)
         
-        elif msg_from_user == '!showrepos':
+        elif msg_from_user == '!show':
             actionShowRepo(reply_token, followers_id)
 
-        elif msg_from_user[0:12] == '!deleterepo ':
+        elif msg_from_user[0:8] == '!delete ':
             actionDeleteRepo(reply_token, msg_from_user, followers_id)
         
 
@@ -77,7 +77,19 @@ def actionShowRepo(reply_token, group_id):
 
 
 def actionSendHelp(reply_token):
-    replyString(reply_token, "add first repo with\n `!addrepo [owner]/[repo]:[access_token]`\n\nhelp with\n `!help` \n\nshow repo list with\n `!showrepos`\n\ndelete repo with\n `!deleterepo [owner]/[repo]`")
+    replyString(reply_token, """
+    add first repo with
+    `!add [owner]/[repo]:[access_token]`
+
+    help with
+    `!help` 
+
+    show repo list with
+    `!show`
+
+    delete repo with
+    `!delete [owner]/[repo]`
+    """)
 
 def actionAddRepo(reply_token, msg_from_user, group_id):
     # catet username, repo, and access token. Format ![repo]/[username]:[access_token]
