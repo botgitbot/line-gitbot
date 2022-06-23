@@ -18,7 +18,7 @@ def diffOfTimeLessThanEqualToInterlude(start_time, event_time_string):
     diff = start_time - event_time
     print("beda waktu", end=": ")
     print(diff.total_seconds())
-    return diff.total_seconds() <= config.INTERLUDE
+    return diff.total_seconds() <= (config.INTERLUDE + config.TIME_TOLERANCE)
 
 def checkIfRepoAndAccessTokenValid(usernameandrepo, access_token):
     if (usernameandrepo == '' or access_token == ''):
