@@ -1,4 +1,4 @@
 
 def initialize():
     global database
-    database = {}
+    database = {"user": {}, "repo": {}}

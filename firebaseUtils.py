@@ -40,7 +40,10 @@ import globalVariable
 def setDatabaseFromFirebase():
     ref = db.reference("/")
     # get ngereturn dictonary
-    globalVariable.database = ref.get()
+    temp = ref.get()
+    if temp == None:
+        temp = {}
+    globalVariable.database = temp
 
 
 # updateData
