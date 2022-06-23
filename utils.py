@@ -8,7 +8,6 @@ import config
 
 def fetchFromGithub(usernameandrepo, access_token):
     url = 'https://api.github.com/repos/' + usernameandrepo +'/events'
-
     headers = {'Authorization': 'token ' + access_token}
     res_json = requests.get(url, headers=headers)
     res_dicts = json.loads(res_json.text)

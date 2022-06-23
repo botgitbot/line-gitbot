@@ -1,7 +1,7 @@
 import pytz
 from datetime import datetime
 
-from globalVariable import database
+import globalVariable
 from lineUtils import sendStringToGroup
 from utils import (
     fetchFromGithub,
@@ -9,15 +9,15 @@ from utils import (
     )
 
 def checkAndSendMessageIfEventHappensInAllRepo():
-    group_id_arr = list(database.keys())
+    group_id_arr = list(globalVariable.database.keys())
     for group_id in group_id_arr:
-        repo_arr = list(database[group_id].keys())
+        repo_arr = list(globalVariable.database[group_id].keys())
         for usernameandrepo in repo_arr:
             print("usernameandrepo: " + usernameandrepo)
-            access_token = database[group_id][usernameandrepo]["access_token"]
-            results = filterEventsToGetNewEventsOnly(usernameandrepo, access_token)
+            access_token = globalVariable.database[group_id][usernameandrepo]["access_token"]
+            results = filterEventsToGetNewEventsOnly(usernameandrepo.replace("@", "/"), access_token)
             if(len(results) != 0):
-                print("ada event baru")
+                print("ada event baru di", usernameandrepo)
                 for result in results:
                     if result["type"] == "PushEvent":
                         string_to_chat = f"[{usernameandrepo}] {result['actor']['login']} pushed to branch {result['payload']['ref']} with {result['payload']['size']} commits:"
@@ -26,7 +26,7 @@ def checkAndSendMessageIfEventHappensInAllRepo():
                             string_to_chat += f"\n  - {commit['message']}"
                         sendStringToGroup(group_id, string_to_chat)
             else:
-                print("tidak ada event baru")
+                print("tidak ada event baru di", usernameandrepo)
                 # chatTogroup(group_id, "tidak ada event baru")
 
 
