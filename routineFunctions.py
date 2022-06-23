@@ -25,6 +25,14 @@ def checkAndSendMessageIfEventHappensInAllRepo():
                         for commit in result["payload"]["commits"]:
                             string_to_chat += f"\n  - {commit['message']}"
                         sendStringToGroup(group_id, string_to_chat)
+                    elif result["type"] == "PullRequestEvent":
+                        string_to_chat = f"[{usernameandrepo}] {result['actor']['login']} {result['payload']['action']} pull request {result['payload']['pull_request']['title']}"
+                        if result['actor']['login'] == "opened" and result['payload']['pull_request']['requested_reviewers']:
+                            string_to_chat += " with request to review from: "
+                            for reviewer in result['payload']['pull_request']['requested_reviewers']:
+                                string_to_chat += f"\n - {reviewer['login']} "
+                        print(string_to_chat)
+                        sendStringToGroup(group_id, string_to_chat)
             else:
                 print("tidak ada event baru")
                 # chatTogroup(group_id, "tidak ada event baru")

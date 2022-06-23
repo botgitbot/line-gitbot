@@ -6,7 +6,7 @@ from datetime import datetime
 import config
 
 
-def fetchFromGithub(usernameandrepo, access_token):
+def fetchPushEventFromGithub(usernameandrepo, access_token):
     url = 'https://api.github.com/repos/' + usernameandrepo +'/events'
 
     headers = {'Authorization': 'token ' + access_token}
