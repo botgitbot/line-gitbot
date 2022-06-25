@@ -30,7 +30,7 @@ def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
 
         elif msg_from_user == '!help': #help
             actionSendHelp(reply_token)
-        elif msg_from_user == 'testflex':
+        elif msg_from_user == '!testflex':
             actionFlex(reply_token);
 
 
