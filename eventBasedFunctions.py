@@ -1,7 +1,7 @@
 
 from firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
 import globalVariable
-from lineUtils import replyString
+from lineUtils import replyString, replyFlexMessage
 from utils import checkIfRepoAndAccessTokenValid
 # udah gada campur tangan sama flask
 def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
@@ -126,42 +126,42 @@ def actionAddRepo(reply_token, msg_from_user, group_id):
            
 
 def actionFlex(reply_token):
-    flex_message = {
-  "type": "bubble",
-  "body": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-      {
-        "type": "text",
-        "text": "nama repo",
-        "decoration": "underline",
-        "contents": []
-      },
-      {
-        "type": "text",
-        "text": "isi messagenya",
-        "style": "italic"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "button",
-            "action": {
-              "type": "uri",
-              "label": "click me",
-              "uri": "https://github.com/addinnabilal/server-line-bot"
-            },
-            "style": "link",
-            "color": "#858383"
-          }
-        ],
-        "paddingAll": "5px"
-      }
-    ],
-    "borderColor": "#965d5d",
-    "backgroundColor": "#d1d1d1"
-  }
-}
+    replyFlexMessage(reply_token, {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "nama repo",
+                    "decoration": "underline",
+                    "contents": []
+                },
+                {
+                    "type": "text",
+                    "text": "isi messagenya",
+                    "style": "italic"
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                        "type": "uri",
+                        "label": "click me",
+                        "uri": "https://github.com/addinnabilal/server-line-bot"
+                        },
+                        "style": "link",
+                        "color": "#858383"
+                    }
+                    ],
+                    "paddingAll": "5px"
+                }
+                ],
+                "borderColor": "#965d5d",
+                "backgroundColor": "#d1d1d1"
+            }
+        })
