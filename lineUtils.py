@@ -7,6 +7,7 @@ from linebot import (
 )
 from linebot.models import (
     TextSendMessage,
+    FlexSendMessage
 )
 
 # from globalVariable import config
@@ -21,3 +22,6 @@ def sendStringToGroup(group_id, string_to_send):
 
 def replyString(reply_token, string_to_send):
     line_bot_api.reply_message(reply_token, TextSendMessage(text=string_to_send))
+
+def replyFlexMessage(reply_token, flex_message):
+    line_bot_api.reply_message(reply_token, FlexSendMessage(alt_text="Flex Message", contents=flex_message))

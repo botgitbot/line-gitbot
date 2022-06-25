@@ -30,7 +30,8 @@ def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
 
         elif msg_from_user == '!help': #help
             actionSendHelp(reply_token)
-
+        elif msg_from_user == 'testflex':
+            actionFlex(reply_token);
 
 
 
@@ -124,3 +125,43 @@ def actionAddRepo(reply_token, msg_from_user, group_id):
         replyString(reply_token, "wrong format, please use\n `!addrepo [owner]/[repo]:[access_token]`")
            
 
+def actionFlex(reply_token):
+    flex_message = {
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "nama repo",
+        "decoration": "underline",
+        "contents": []
+      },
+      {
+        "type": "text",
+        "text": "isi messagenya",
+        "style": "italic"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "click me",
+              "uri": "https://github.com/addinnabilal/server-line-bot"
+            },
+            "style": "link",
+            "color": "#858383"
+          }
+        ],
+        "paddingAll": "5px"
+      }
+    ],
+    "borderColor": "#965d5d",
+    "backgroundColor": "#d1d1d1"
+  }
+}
