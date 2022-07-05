@@ -1,4 +1,4 @@
-from utils.lineUtils import pushFlexMessageTemplateTitleTextUrlToGroup
+from utils.lineUtils import pushFlexMessageTemplateTitleTextToGroup
 
 
 def respondOnPushEvent(username, repo, event, group_id):
@@ -7,4 +7,4 @@ def respondOnPushEvent(username, repo, event, group_id):
     print(string_to_chat)
     for commit in event["payload"]["commits"]:
         string_to_chat += f"\n  - {commit['message']}"
-    pushFlexMessageTemplateTitleTextUrlToGroup(group_id, "Push request event", string_to_chat, uri)
+    pushFlexMessageTemplateTitleTextToGroup(group_id, "Push request event", string_to_chat)
