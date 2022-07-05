@@ -1,4 +1,4 @@
-from actions.respondOnPullRequestReviewCommentEvent import respondOnPullRequestReviewCommentEvent
+from responds.respondOnPullRequestReviewCommentEvent import respondOnPullRequestReviewCommentEvent
 
 import globalVariable
 from utils.lineUtils import sendStringToGroup

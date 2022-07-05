@@ -1,21 +1,19 @@
 
-from utils.lineUtils import replyString
-
+from utils.lineUtils import replyString, replyFlexMessageTemplateTitleText
 
 def actionSendHelp(reply_token):
-    replyString(reply_token, """
-    add first repo with
-    `!add [owner]/[repo]:[access_token]`
+    replyFlexMessageTemplateTitleText(reply_token, "Command List", """
+        add first repo with
+        `!add [owner]/[repo]:[access_token]`
 
-    help with
-    `!help` 
+        help with
+        `!help` 
 
-    show repo list with
-    `!show`
+        show repo list with
+        `!show`
 
-    delete repo with
-    `!delete [owner]/[repo]`
-    """)
+        delete repo with
+        `!delete [owner]/[repo]`
+        """)
 
-
-           
+        

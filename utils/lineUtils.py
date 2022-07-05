@@ -12,7 +12,6 @@ from linebot.models import (
 
 # from globalVariable import config
 
-# print(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 # awalnya fungsi dibawah namanya 'chatToFollower'. aku ganti jadi sendString biar 1. lebih explisit(yang aku kirim string. keknya bisa selain string deh, dan kalo pake kata chat, terlalu luas jdinya) 2. bisa bedain antara 'send langsung sama reply'(karena keduanya termasuk chat)
 
@@ -28,3 +27,135 @@ def replyString(reply_token, string_to_send):
 
 def replyFlexMessage(reply_token, flex_message):
     line_bot_api.reply_message(reply_token, FlexSendMessage(alt_text="Flex Message", contents=flex_message))
+
+def replyFlexMessageTemplateTitleText(reply_token, title, text_content):
+    flex_message = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "text",
+                "text": title,
+                "weight": "bold",
+                "color": "#576F72",
+                "size": "14px"
+            },
+            {
+                "type": "text",
+                "text": text_content,
+                "wrap": True,
+                "size": "14px"
+            }
+            ],
+            "backgroundColor": "#F0EBE3",
+            "paddingAll": "30px"
+        },
+        "size": "kilo"
+    }
+    replyFlexMessage(reply_token, flex_message)
+
+def pushFlexMessageTemplateTitleTextToGroup(group_id, title, text_content):
+    flex_message = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "text",
+                "text": title,
+                "weight": "bold",
+                "color": "#576F72",
+                "size": "14px"
+            },
+            {
+                "type": "text",
+                "text": text_content,
+                "wrap": True,
+                "size": "14px"
+            }
+            ],
+            "backgroundColor": "#F0EBE3",
+            "paddingAll": "30px"
+        },
+        "size": "kilo"
+    }
+    sendFlexMessageToGroup(group_id, flex_message)
+
+def replyFlexMessageTemplateTitleTextUrl(reply_token, title, text_content, uri):
+    flex_message = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "text",
+                "text": title,
+                "weight": "bold",
+                "color": "#576F72",
+                "size": "14px"
+            },
+            {
+                "type": "text",
+                "text": text_content,
+                "wrap": True,
+                "size": "14px"
+            },
+            {
+                "type": "button",
+                "action": {
+                "type": "uri",
+                "label": "Click me",
+                "uri": uri
+                },
+                "style": "link",
+                "color": "#576F72"
+            }
+            ],
+            "backgroundColor": "#F0EBE3",
+            "paddingAll": "30px"
+        },
+        "size": "kilo"
+    }
+    replyFlexMessage(reply_token, flex_message)
+
+def pushFlexMessageTemplateTitleTextUrlToGroup(group_id, title, text_content, uri):
+    flex_message = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "text",
+                "text": title,
+                "weight": "bold",
+                "color": "#576F72",
+                "size": "14px"
+            },
+            {
+                "type": "text",
+                "text": text_content,
+                "wrap": True,
+                "size": "14px"
+            },
+            {
+                "type": "button",
+                "action": {
+                "type": "uri",
+                "label": "Click me",
+                "uri": uri
+                },
+                "style": "link",
+                "color": "#576F72"
+            }
+            ],
+            "backgroundColor": "#F0EBE3",
+            "paddingAll": "30px"
+        },
+        "size": "kilo"
+    }
+    sendFlexMessageToGroup(group_id, flex_message)
