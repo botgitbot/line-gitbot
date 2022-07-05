@@ -1,7 +1,7 @@
 
 from firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
 import globalVariable
-from lineUtils import replyString
+from lineUtils import replyString, replyFlexMessage
 from utils import checkIfRepoAndAccessTokenValid
 # udah gada campur tangan sama flask
 def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
@@ -18,19 +18,20 @@ def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
         print(msg_from_user)
 
 
-        if msg_from_user[0:9] == '!addrepo ': #intentional space behind
+        if msg_from_user[0:5] == '!add ': #intentional space behind
             actionAddRepo(reply_token, msg_from_user, followers_id)
         
-        elif msg_from_user == '!showrepos':
+        elif msg_from_user == '!show':
             actionShowRepo(reply_token, followers_id)
 
-        elif msg_from_user[0:12] == '!deleterepo ':
+        elif msg_from_user[0:8] == '!delete ':
             actionDeleteRepo(reply_token, msg_from_user, followers_id)
         
 
         elif msg_from_user == '!help': #help
             actionSendHelp(reply_token)
-
+        elif msg_from_user == '!testflex':
+            actionFlex(reply_token);
 
 
 
@@ -68,16 +69,47 @@ def actionDeleteRepo(reply_token, msg_from_user, group_id):
 
 def actionShowRepo(reply_token, group_id):
     if group_id in list(globalVariable.database.keys()):
-        stringToSend = "repo list for group:\n"
+        stringToSend = ""
         for key in globalVariable.database[group_id]:
-            stringToSend += key.replace("@", "/") + "\n"
-        replyString(reply_token, stringToSend)
+            stringToSend += "-" + key.replace("@", "/") + "\n"
+        replyFlexMessage(reply_token, {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "Repository list in this group:",
+                    "weight": "bold"
+                },
+                {
+                    "type": "text",
+                    "text": stringToSend,
+                    "wrap": True
+                }
+                ],
+                "backgroundColor": "#EFEFEF"
+            }
+            })
     else:
         replyString(reply_token, "no repo added yet")
 
 
 def actionSendHelp(reply_token):
-    replyString(reply_token, "add first repo with\n `!addrepo [owner]/[repo]:[access_token]`\n\nhelp with\n `!help` \n\nshow repo list with\n `!showrepos`\n\ndelete repo with\n `!deleterepo [owner]/[repo]`")
+    replyString(reply_token, """
+    add first repo with
+    `!add [owner]/[repo]:[access_token]`
+
+    help with
+    `!help` 
+
+    show repo list with
+    `!show`
+
+    delete repo with
+    `!delete [owner]/[repo]`
+    """)
 
 def actionAddRepo(reply_token, msg_from_user, group_id):
     # catet username, repo, and access token. Format ![repo]/[username]:[access_token]
@@ -112,3 +144,43 @@ def actionAddRepo(reply_token, msg_from_user, group_id):
         replyString(reply_token, "wrong format, please use\n `!addrepo [owner]/[repo]:[access_token]`")
            
 
+def actionFlex(reply_token):
+    replyFlexMessage(reply_token, {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "nama repo",
+                    "decoration": "underline",
+                    "contents": []
+                },
+                {
+                    "type": "text",
+                    "text": "isi messagenya",
+                    "style": "italic"
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                        "type": "uri",
+                        "label": "click me",
+                        "uri": "https://github.com/addinnabilal/server-line-bot"
+                        },
+                        "style": "link",
+                        "color": "#858383"
+                    }
+                    ],
+                    "paddingAll": "5px"
+                }
+                ],
+                "borderColor": "#965d5d",
+                "backgroundColor": "#d1d1d1"
+            }
+        })

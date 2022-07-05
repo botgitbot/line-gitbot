@@ -7,6 +7,9 @@ import config
 
 
 def fetchFromGithub(usernameandrepo, access_token):
+    return fetchEventFromGithub(usernameandrepo, access_token)
+
+def fetchEventFromGithub(usernameandrepo, access_token):
     url = 'https://api.github.com/repos/' + usernameandrepo +'/events'
     headers = {'Authorization': 'token ' + access_token}
     res_json = requests.get(url, headers=headers)
@@ -16,10 +19,15 @@ def fetchFromGithub(usernameandrepo, access_token):
 def diffOfTimeLessThanEqualToInterlude(start_time, event_time_string):
     event_time = datetime.strptime(event_time_string, '%Y-%m-%dT%H:%M:%SZ')
     diff = start_time - event_time
+
+
     # print recent
-    if(diff.total_seconds() <= 5*config.INTERLUDE):
+    if(diff.total_seconds() <= 9*config.INTERLUDE):
         print("beda waktu", end=": ")
         print(diff.total_seconds())
+
+
+    
     return diff.total_seconds() <= (config.INTERLUDE + config.TIME_TOLERANCE)
 
 def checkIfRepoAndAccessTokenValid(usernameandrepo, access_token):

@@ -32,3 +32,12 @@ todo:
 2. Implement reply message based on command yang '!addrepo' etc
 3. Add other functionalities: pull req, merge, comments (tbd)
 4. Handle all possible user-error
+
+v1
+1. event dilengkapin semua: push dan pull req
+2. design display picture  + status message
+3. 
+
+v2
+1. ganti respond jadi rich text message
+2. improve help. bisa kasih specific help.
