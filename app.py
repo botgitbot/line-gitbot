@@ -25,7 +25,7 @@ from eventBasedFunctions import actionBasedOnMessage
 from routineFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
 
-from firebaseUtils import setDatabaseFromFirebase
+from utils.firebaseUtils import setDatabaseFromFirebase
 
 
 #    CREATE FLASK APP
