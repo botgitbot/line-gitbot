@@ -5,7 +5,7 @@ load_dotenv()
 import config 
 import globalVariable
 globalVariable.initialize()
-
+import json
 
 # IMPORT SUBPROGRAM
 from flask import Flask, request, abort
@@ -59,6 +59,13 @@ def callback():
     except InvalidSignatureError:
         abort(400)
     return 'OK'
+
+@app.route("/webhook", methods=['POST'])
+def webhook():
+    request_json = request.json
+    print('Payload: ')
+    # Change from original - remove the need for function to print
+    print(json.dumps(request_json,indent=4))
 
 # handle message
 @handler.add(MessageEvent, message=TextMessage)

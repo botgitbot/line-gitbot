@@ -37,7 +37,7 @@ def respondBasedOnEvent(username, repo, event, group_id):
 
     elif event_type == "PullRequestEvent":
         respondOnPullRequestEvent(username, repo, event, group_id)
-    elif event_type == "ReleaseEvent" and event["payload"]["action"] == "published" and not(event["payload"]["prerelease"]):
+    elif event_type == "ReleaseEvent" and event["payload"]["action"] == "published" and not(event["payload"]["release"]["prerelease"]):
         respondOnReleaseEvent(username, repo, event, group_id)
     elif event_type == "PullRequestReviewCommentEvent":
         respondOnPullRequestReviewCommentEvent(username, repo, event, group_id)
