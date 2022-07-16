@@ -49,7 +49,8 @@ def hello():
 def hei():
     isForm = False
     try:
-        request.form
+        if request.form['payload']:
+            isForm = True
         isForm = True
         print("keknya form")
     except:
