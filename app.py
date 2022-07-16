@@ -56,7 +56,7 @@ def hei():
 
     if isForm:
         print("payload(form)")
-        print(request.form["payload"])
+        print(request.form.keys())
     else:
         print("payload(json)")
         print(request.json)
