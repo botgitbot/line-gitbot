@@ -49,9 +49,11 @@ def hello():
 def hei():
     isForm = False
     try:
-        print(request.form)
+        request.form
         isForm = True
+        print("keknya form")
     except:
+        print("keknya json")
         pass
 
     if isForm:
