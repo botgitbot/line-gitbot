@@ -45,6 +45,13 @@ print(globalVariable.database)
 def hello():
     return 'Hello World!'
 
+@app.route('/', methods=['POST'])
+def hei():
+    print("request form.keys")
+    print(request.form.keys())
+    # Change from original - remove the need for function to print
+    return 'Hello World! from post'
+
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():

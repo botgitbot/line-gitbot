@@ -13,7 +13,7 @@ def fetchFromGithub(username, repo , access_token):
 def fetchEventFromGithub(username, repo, access_token):
 
     url = 'https://api.github.com/repos/' + username + "/" + repo +'/events'
-    print(url)
+    # print(url)
     headers = {'Authorization': 'token ' + access_token}
     res_json = requests.get(url, headers=headers)
     res_dicts = json.loads(res_json.text)

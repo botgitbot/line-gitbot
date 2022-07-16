@@ -15,7 +15,7 @@ def checkAndSendMessageIfEventHappensInAllRepo():
     for group_id in group_id_arr:
         repo_arr = list(globalVariable.database[group_id].keys())
         for key in repo_arr:
-            print("key: " +key)
+            # print("key: " +key)
             access_token = globalVariable.database[group_id][key]["access_token"]
 
 
@@ -27,7 +27,8 @@ def checkAndSendMessageIfEventHappensInAllRepo():
                 for event in results:
                     respondBasedOnEvent(username, repo, event, group_id)
             else:
-                print("tidak ada event baru di", username + "/" + repo)
+                pass
+                # print("tidak ada event baru di", username + "/" + repo)
 
 
 def respondBasedOnEvent(username, repo, event, group_id):
