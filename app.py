@@ -47,8 +47,20 @@ def hello():
 
 @app.route('/', methods=['POST'])
 def hei():
-    print("request form.keys")
-    print(request.form.keys())
+    isForm = False
+    try:
+        print(request.form)
+        isForm = True
+    except:
+        pass
+
+    if isForm:
+        print("payload(form)")
+        print(request.form.keys()[0])
+    else:
+        print("payload(json)")
+        print(request.json)
+
     # Change from original - remove the need for function to print
     return 'Hello World! from post'
 
