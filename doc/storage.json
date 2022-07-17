@@ -1,7 +1,14 @@
 {
-  "group1id": {
-    "christojeffrey@dummy-repo": { "access_token": "adfasfasdfasda2343" },
-    "christojeffrey@dummy-repo2": { "access_token": "adfasfasdfasda2343" }
+  "active": {
+    "groupid1": {
+      "webhook id": "username and repo yang sama",
+      "webhook id2": "username and repo yang sama"
+    }
   },
-  "group2id": {}
+  "inactive": {
+    "groupid1": {
+      "webhook id": "username and repo sama",
+      "webhook id2": "username and repo yang sama"
+    }
+  }
 }

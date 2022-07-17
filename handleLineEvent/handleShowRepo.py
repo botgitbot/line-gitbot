@@ -2,7 +2,7 @@ import globalVariable
 from utils.lineUtils import replyFlexMessage, replyString, replyFlexMessageTemplateTitleText
 from utils.utils import keyToUsernameAndRepo
 
-def actionShowRepo(reply_token, group_id):
+def handleShowRepo(reply_token, group_id):
     if group_id in list(globalVariable.database.keys()):
         stringToSend = ""
         for key in globalVariable.database[group_id]:

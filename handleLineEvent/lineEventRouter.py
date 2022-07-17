@@ -6,7 +6,7 @@ from actions.actionShowRepo import actionShowRepo
 from utils.lineUtils import replyString
 from utils.utils import sanitizeMessage, splitMessageRepoUsername, splitMessageRepoUsernameToken
 # udah gada campur tangan sama flask
-def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
+def lineEventRouter(msg_from_user, source_type, followers_id, reply_token):
     if source_type == 'user':
         replyString(reply_token, "Line gitbot is only available for group chat.")
         return
@@ -23,14 +23,6 @@ def actionBasedOnMessage(msg_from_user, source_type, followers_id, reply_token):
 
         elif msg_from_user == '!show':
             actionShowRepo(reply_token, followers_id)
-
-        elif msg_from_user[0:8] == '!delete ':
-            try:
-                username, repo = splitMessageRepoUsername(msg_from_user[8:])
-            except:
-                replyString(reply_token, "wrong format, please use\n `!deleterepo [owner]/[repo]`")
-                return
-            actionDeleteRepo(reply_token, username, repo, followers_id)
 
         elif msg_from_user == '!help':
             actionSendHelp(reply_token)

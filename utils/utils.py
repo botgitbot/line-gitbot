@@ -7,61 +7,6 @@ from datetime import datetime
 import config
 
 
-def fetchFromGithub(username, repo , access_token):
-    return fetchEventFromGithub(username, repo, access_token)
-
-def fetchEventFromGithub(username, repo, access_token):
-
-    url = 'https://api.github.com/repos/' + username + "/" + repo +'/events'
-    # print(url)
-    headers = {'Authorization': 'token ' + access_token}
-    res_json = requests.get(url, headers=headers)
-    res_dicts = json.loads(res_json.text)
-    return res_dicts
-
-def diffOfTimeLessThanEqualToInterlude(start_time, event_time_string):
-    event_time = datetime.strptime(event_time_string, '%Y-%m-%dT%H:%M:%SZ')
-    diff = start_time - event_time
-
-
-    # print recent
-    if(diff.total_seconds() <= 9*config.INTERLUDE):
-        print("beda waktu", end=": ")
-        print(diff.total_seconds())
-
-
-    
-    return diff.total_seconds() <= (config.INTERLUDE + config.TIME_TOLERANCE)
-
-def checkIfRepoAndAccessTokenValid(usernameandrepo, access_token):
-    if (usernameandrepo == '' or access_token == ''):
-        return False
-    url = 'https://api.github.com/repos/' + usernameandrepo +'/events'
-    headers = {'Authorization': 'token ' + access_token}
-    res_json = requests.get(url, headers=headers)
-    if (res_json.status_code == 200):
-        return True
-    return False
-    
-def filterEventsToGetNewEventsOnly(username, repo, access_token):
-    # repo sama username buat ngeidentifikasi repo yang mana yang mo disentuh
-    # return array of new event(new disini artinya event tersebut dilakukan selama interlude). kalo ga ada, return empty array
-    
-    # print("banyak event sampe saat ini:", len(res_dicts))
-    start_time = datetime.now(pytz.utc).replace(tzinfo=None) 
-    responds = fetchFromGithub(username, repo, access_token)
-    # print("waktu sekarang", start_time)
-    # iterasi setiap response, jika ada response yang dibuat < 5 menit terakhir, add to results
-    results = []
-    for res in responds:        
-        # "2022-05-25T05:58:32Z"
-        event_time_string = res["created_at"]
-
-        if(diffOfTimeLessThanEqualToInterlude(start_time, event_time_string)):
-            print("ada event baru!")
-            results.append(res)
-    return results
-
 def sanitizeMessage(message):
     # sanitize msg_from_user
     # delete spaces in the back, and remove spaces that is more than one
@@ -87,8 +32,43 @@ def splitMessageRepoUsername(message):
     repo = repousername[1]
     return username, repo
 
-def createKeyFromUsernameAndRepo(username, repo):
+def createDatabaseValueFromUsernameAndRepo(username, repo):
     return username + "@" + repo
 
-def keyToUsernameAndRepo(key):
+def databaseValueToUsernameAndRepo(key):
     return key.split("@")[0], key.split("@")[1]
+
+
+def encryptGroupId(groupid):
+    # pake  PASSWORD_ENCRYPTION_KEY di env
+    return  groupid
+
+def decryptGroupId(groupid):
+    # pake  PASSWORD_ENCRYPTION_KEY di env
+    return  groupid
+
+
+def getPayload(request):
+    isForm = False
+    try:
+        if request.form['payload']:
+            isForm = True
+        isForm = True
+        print("keknya form")
+    except:
+        print("keknya json")
+        pass
+
+    if isForm:
+        print("payload(form)")
+        print(type(request.form))
+        print(request.form.keys())
+        # dict_keys(['payload'])
+        print(request.form['payload'])
+        inString = request.form['payload']
+    else:
+        print("payload(json)")
+        print(request.json)
+        inString = request.json
+    # return dalam bentuk dict
+    return {}

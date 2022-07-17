@@ -1,7 +1,7 @@
 
 from utils.lineUtils import replyString, replyFlexMessageTemplateTitleText
 
-def actionSendHelp(reply_token):
+def handleSendHelp(reply_token):
     replyFlexMessageTemplateTitleText(reply_token, "Command List", """
         add first repo with
         `!add [owner]/[repo]:[access_token]`

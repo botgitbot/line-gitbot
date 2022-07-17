@@ -2,6 +2,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 # now you can use value from .env with from `os.environ` or `os.getenv`
+
 import config 
 import globalVariable
 globalVariable.initialize()
@@ -21,8 +22,8 @@ from linebot.models import (
     TextMessage,
 )
 
-from eventBasedFunctions import actionBasedOnMessage
-from routineFunctions import checkAndSendMessageIfEventHappensInAllRepo
+from handleLineEvent.lineEventRouter import actionBasedOnMessage
+from githubEventFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
 
 from utils.firebaseUtils import setDatabaseFromFirebase
@@ -45,30 +46,8 @@ print(globalVariable.database)
 def hello():
     return 'Hello World!'
 
-@app.route('/', methods=['POST'])
-def hei():
-    isForm = False
-    try:
-        if request.form['payload']:
-            isForm = True
-        isForm = True
-        print("keknya form")
-    except:
-        print("keknya json")
-        pass
 
-    if isForm:
-        print("payload(form)")
-        print(type(request.form))
-        print(request.form.keys())
-        # dict_keys(['payload'])
-        print(request.form['payload'])
-    else:
-        print("payload(json)")
-        print(request.json)
-
-    # Change from original - remove the need for function to print
-    return 'Hello World! from post'
+    
 
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
@@ -85,40 +64,35 @@ def callback():
         abort(400)
     return 'OK'
 
-@app.route("/webhook", methods=['POST'])
+
+
+@app.route("/webhook/", methods=['POST'])
 def webhook():
-    request_json = request.json
-    print('Payload: ')
-    # Change from original - remove the need for function to print
-    print(json.dumps(request_json,indent=4))
+    # decrypt path args buat dapetin group id
+    # cek group id ada ngga di database bagian active. kalo ada, handle eventnya. kalo gada, do nothing(artinya gada group id tersebut yg nge invite kita)
+
+    #dapetin payload pake getPayload di util
+    
+    # handle eventnya dengan cara lempar ke githubEventRouter. 
+
+    return 'OK'
 
 # handle message
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    # 'strip down' event, to get only the data we need
-    msg_from_user = event.message.text
-    reply_token = event.reply_token
-    source_type = event.source.type
-    source_id = event.source.user_id
-    followers_id = event.source.user_id
-
-    if (source_type == 'user'):
-        source_id = event.source.user_id
-    elif (event.source.type == 'group'):
-        source_id = event.source.group_id
-
-    actionBasedOnMessage(msg_from_user, source_type, source_id, reply_token)
+    pass
 
 
-#   FUNCTION TO RUN EVERY MINUTE
-import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
+# handle leave group event
+def handle_leave(event):
+    # pake handleGroupLeave
+    pass
+# handle diinvite ke dalem group
+def handle_invite(event):
+    # pake handleGroupInvite
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=checkAndSendMessageIfEventHappensInAllRepo, trigger="interval", seconds = config.INTERLUDE)
-scheduler.start()
-# Shut down the scheduler when exiting the app
-atexit.register(lambda: scheduler.shutdown())
+    pass
+
 
 
 #    RUN FLASK APP
