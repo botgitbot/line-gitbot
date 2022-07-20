@@ -1,7 +1,7 @@
 from utils.lineUtils import pushFlexMessageTemplateTitleTextToGroup
 
 
-def respondOnPushEvent(username, repo, event, group_id):
+def handlePushEvent(username, repo, event, group_id):
     usernameandrepo  = username + "/" + repo
     string_to_chat = f"{event['actor']['login']} pushed to branch {event['payload']['ref']} with {event['payload']['size']} commits:"
     print(string_to_chat)

@@ -6,3 +6,4 @@ apscheduler
 firebase_admin
 python-dotenv
 config
+cryptography

@@ -1,12 +1,19 @@
-# IMPORT KAMUS(env, config, globalvariable)
 from dotenv import load_dotenv
 load_dotenv()
 # now you can use value from .env with from `os.environ` or `os.getenv`
 
+from handleGithubEvent.githubEventRouter import githubEventRouter
+from utils.lineUtils import sendStringToGroup
+
+from utils.utils import decryptGroupId, getPayload
+
+from handleLineEvent.lineEventRouter import lineEventRouter
+
+
+# IMPORT KAMUS(env, config, globalvariable)
 import config 
 import globalVariable
 globalVariable.initialize()
-import json
 
 # IMPORT SUBPROGRAM
 from flask import Flask, request, abort
@@ -19,14 +26,14 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent,
+    LeaveEvent,
+    JoinEvent,
     TextMessage,
 )
 
-from handleLineEvent.lineEventRouter import actionBasedOnMessage
-from githubEventFunctions import checkAndSendMessageIfEventHappensInAllRepo
 
 
-from utils.firebaseUtils import setDatabaseFromFirebase
+from utils.firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
 
 
 #    CREATE FLASK APP
@@ -66,33 +73,45 @@ def callback():
 
 
 
-@app.route("/webhook/", methods=['POST'])
-def webhook():
+@app.route("/webhook/<token>", methods=['POST'])
+def webhook(token):
     # decrypt path args buat dapetin group id
+    group_id = decryptGroupId(token)
     # cek group id ada ngga di database bagian active. kalo ada, handle eventnya. kalo gada, do nothing(artinya gada group id tersebut yg nge invite kita)
-
-    #dapetin payload pake getPayload di util
-    
-    # handle eventnya dengan cara lempar ke githubEventRouter. 
-
+    if(group_id in globalVariable.database["active"].keys()):
+        #dapetin payload pake getPayload di util
+        # send message ke group id tersebut
+        sendStringToGroup(group_id, "ada github event")
+        payload = getPayload(request)
+        # handle eventnya dengan cara lempar ke githubEventRouter. 
+        githubEventRouter(payload, group_id)
+    else:
+        pass
     return 'OK'
 
 # handle message
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    lineEventRouter("message",event)
+    # pake lineEventRouter
     pass
 
 
 # handle leave group event
+@handler.add(LeaveEvent)
 def handle_leave(event):
+    print("ada yg ngekick dari group!")
+    lineEventRouter("leave", event)
     # pake handleGroupLeave
     pass
 # handle diinvite ke dalem group
+@handler.add(JoinEvent)
 def handle_invite(event):
+    print("join?")
+    lineEventRouter("join", event)
     # pake handleGroupInvite
 
     pass
-
 
 
 #    RUN FLASK APP

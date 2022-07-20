@@ -3,5 +3,6 @@
 
 # durasi antar routine function call dalam detik
 # INTERLUDE = 20
-# PORT = 8000
+PORT = 8000
 # TIME_TOLERANCE = 5
+placeholderWebhook = {"examplewebhook":{"exampleusername": "exampleusername", "examplerepo": "examplerepo"}}

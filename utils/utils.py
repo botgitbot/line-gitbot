@@ -1,4 +1,5 @@
 # utils umum.
+import os
 import pytz
 import requests
 import json
@@ -6,6 +7,8 @@ from datetime import datetime
 
 import config
 
+from cryptography.fernet import Fernet
+import base64
 
 def sanitizeMessage(message):
     # sanitize msg_from_user
@@ -41,11 +44,20 @@ def databaseValueToUsernameAndRepo(key):
 
 def encryptGroupId(groupid):
     # pake  PASSWORD_ENCRYPTION_KEY di env
-    return  groupid
+    f = Fernet(os.getenv("PASSWORD_ENCRYPTION_KEY"))
+    groupidAsByte = str.encode(groupid)
+    tokenAsByte = f.encrypt(groupidAsByte)
+    tokenAsStrWithBase32 = base64.b32encode(tokenAsByte).decode()
+    return tokenAsStrWithBase32
 
-def decryptGroupId(groupid):
+
+def decryptGroupId(tokenAsStrWithBase32):
     # pake  PASSWORD_ENCRYPTION_KEY di env
-    return  groupid
+    f = Fernet(os.getenv("PASSWORD_ENCRYPTION_KEY"))
+    tokenAsByte = base64.b32decode(tokenAsStrWithBase32)
+    groupIdAsByte = f.decrypt(tokenAsByte)
+    groupIdAsStr = groupIdAsByte.decode()
+    return groupIdAsStr
 
 
 def getPayload(request):
@@ -61,14 +73,16 @@ def getPayload(request):
 
     if isForm:
         print("payload(form)")
-        print(type(request.form))
-        print(request.form.keys())
+        # print(type(request.form))
+        # print(request.form.keys())
         # dict_keys(['payload'])
-        print(request.form['payload'])
+        # print(request.form['payload'])
         inString = request.form['payload']
     else:
         print("payload(json)")
-        print(request.json)
+        # print(request.json)
         inString = request.json
     # return dalam bentuk dict
-    return {}
+    # instring to dict
+    inDict = json.loads(inString)
+    return inDict

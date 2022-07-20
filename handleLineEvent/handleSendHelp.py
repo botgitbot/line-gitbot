@@ -1,19 +1,7 @@
 
-from utils.lineUtils import replyString, replyFlexMessageTemplateTitleText
+from utils.lineUtils import replyFlexMessageTemplateTitleText
 
 def handleSendHelp(reply_token):
-    replyFlexMessageTemplateTitleText(reply_token, "Command List", """
-        add first repo with
-        `!add [owner]/[repo]:[access_token]`
-
-        help with
-        `!help` 
-
-        show repo list with
-        `!show`
-
-        delete repo with
-        `!delete [owner]/[repo]`
-        """)
+    replyFlexMessageTemplateTitleText(reply_token,"woops", "help is not yet implemented")
 
         

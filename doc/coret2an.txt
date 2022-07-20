@@ -1,3 +1,22 @@
+yg can go wrong
+
+kalo orangnya ngeganti link webhooknya, nanti bisa on update malah nge chat ke group lain. ini bisa kita kurangi, dengan cara nyatet group id yang valid(yaitu yang lgi nge add OCnya)
+
+kalo orangnya nge add webhook yang sama dua kali, ya ke data 2x
+
+kalo orangnya ngedelete OC dari group, normalnyak, databasenya di delete, itu aneh karena webhhooknya benernya masih nyantol
+
+'kalo gitu groupnya jangan didelete dari database gimana?'
+- databasenuya ngendud terus karena gada yg di delete.
+- nti waktu orangnya balik nge invite lagi, list repositorynya masih ke save (which is cool actually)
+
+kompromi yang gabisa dihindari = kalo orang ngeganti webhook dan kebetulan itu group id yang valid. ini beneran aku gatau gimana cara hindarinya. 
+
+fitur delete webhook dari group linennya gabisa jalan. soalnya kita butuh auth 
+
+
+bisa dihindari dengan cara gausah nyatet repository yang lagi di track oleh suatu group. tapi ini kerasa berguna :(
+
 lesson learned, begitu suatu modul diimport, dia bakal di run. gk peduli ntah itu keywordnya from atau import langsung.
 
 

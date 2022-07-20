@@ -1,7 +1,7 @@
 from utils.lineUtils import sendStringToGroup, pushFlexMessageTemplateTitleTextUrlToGroup
 
 
-def respondOnPullRequestEvent(username, repo, event, group_id):
+def handlePullRequest(username, repo, event, group_id):
     usernameandrepo = username + "/" + repo
     string_to_chat = f"{event['actor']['login']} {event['payload']['action']} pull request \"{event['payload']['pull_request']['title']}\" from {event['payload']['pull_request']['head']['ref']} to {event['payload']['pull_request']['base']['ref']}"
     print(string_to_chat)

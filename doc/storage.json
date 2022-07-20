@@ -1,14 +1,14 @@
 {
   "active": {
     "groupid1": {
-      "webhook id": "username and repo yang sama",
-      "webhook id2": "username and repo yang sama"
+      "webhook id": { "username": "username", "repo": "repo" },
+      "webhook id2": { "username": "username", "repo": "repo" }
     }
   },
   "inactive": {
     "groupid1": {
-      "webhook id": "username and repo sama",
-      "webhook id2": "username and repo yang sama"
+      "webhook id": { "username": "username", "repo": "repo" },
+      "webhook id2": { "username": "username", "repo": "repo" }
     }
   }
 }

@@ -5,6 +5,7 @@ import os
 
 import firebase_admin
 from firebase_admin import credentials
+from numpy import place
 
 # create firebaseCredential based on env
 fc = {
@@ -34,13 +35,15 @@ from firebase_admin import db
 
 
 import globalVariable
+from config import placeholderWebhook 
+
 # getData
 def setDatabaseFromFirebase():
     ref = db.reference("/")
     # get ngereturn dictonary
     temp = ref.get()
     if temp == None:
-        temp = {}
+        temp = {"inactive": {"examplegroupid":placeholderWebhook}, "active": {"examplegroupid":placeholderWebhook}}
     globalVariable.database = temp
 
 
