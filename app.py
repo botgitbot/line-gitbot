@@ -81,7 +81,6 @@ def webhook(token):
     if(group_id in globalVariable.database["active"].keys()):
         #dapetin payload pake getPayload di util
         # send message ke group id tersebut
-        sendStringToGroup(group_id, "ada github event")
         payload = getPayload(request)
         # handle eventnya dengan cara lempar ke githubEventRouter. 
         githubEventRouter(payload, group_id)
