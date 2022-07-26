@@ -159,3 +159,73 @@ def pushFlexMessageTemplateTitleTextUrlToGroup(group_id, title, text_content, ur
         "size": "kilo"
     }
     sendFlexMessageToGroup(group_id, flex_message)
+
+
+
+class standardFlexMessageClass:
+    def __init__(self, title, text_content):
+        self.flexMessageTemplate = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "text",
+                "text": title,
+                "weight": "bold",
+                "color": "#576F72",
+                "size": "14px"
+            },
+            {
+                "type": "text",
+                "text": text_content,
+                "wrap": True,
+                "size": "14px"
+            }
+            ],
+            "backgroundColor": "#F0EBE3",
+            "paddingAll": "30px"
+        },
+        "size": "kilo"
+    }
+
+class flexMessageWithUrlClass:
+    def __init__(self, title, text_content, url, button_text):
+        self.flexMessageTemplate = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "text",
+                "text": title,
+                "weight": "bold",
+                "color": "#576F72",
+                "size": "14px"
+            },
+            {
+                "type": "text",
+                "text": text_content,
+                "wrap": True,
+                "size": "14px"
+            },
+            {
+                "type": "button",
+                "action": {
+                    "type": "uri",
+                    "label": button_text,
+                    "uri": url
+                },
+                "style": "primary",
+                "color": "#576F72",
+                "margin": "5px",
+                "height": "sm"
+                }
+            ],
+            "backgroundColor": "#F0EBE3",
+            "paddingAll": "30px"
+        },
+        "size": "kilo"
+    }

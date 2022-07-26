@@ -1,10 +1,16 @@
-from utils.lineUtils import pushFlexMessageTemplateTitleTextToGroup
+from utils.lineUtils import flexMessageWithUrlClass, sendFlexMessageToGroup
 
 
-def handlePushEvent(username, repo, event, group_id):
-    usernameandrepo  = username + "/" + repo
-    string_to_chat = f"{event['actor']['login']} pushed to branch {event['payload']['ref']} with {event['payload']['size']} commits:"
-    print(string_to_chat)
-    for commit in event["payload"]["commits"]:
-        string_to_chat += f"\n  - {commit['message']}"
-    pushFlexMessageTemplateTitleTextToGroup(group_id, usernameandrepo, string_to_chat)
+def handlePushEvent(group_id, repo_title, payload):
+    pusher = payload["pusher"]["name"]
+    ref = payload["ref"]
+    commits = payload["commits"]
+    compare_changes_url = payload["compare"]
+
+    text_content = f"{pusher} pushed to branch {ref}"
+    if len(commits) > 0:
+        text_content += f" with {len(commits)} commits:"
+        for commit in commits:
+            text_content += f"\n  - {commit['message']}"
+    flex_message = flexMessageWithUrlClass(repo_title, text_content, compare_changes_url, "Compare Changes").flexMessageTemplate
+    sendFlexMessageToGroup(group_id, flex_message)

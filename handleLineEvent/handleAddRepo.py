@@ -8,5 +8,5 @@ def handleAddRepo(reply_token, group_id):
     encrypted = encryptGroupId(group_id)
     link = "https://domain.com/webhook/" + encrypted
     decrypted = decryptGroupId(encrypted)
-    replyString(reply_token, "addrepo is not yet implemented"  + "\n" + link + "\nkalo di decrypt jadi" + decrypted)
+    replyString(reply_token, "Please add following link to your repository webhook"  + "\n" + link)
     

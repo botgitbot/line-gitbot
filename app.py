@@ -82,7 +82,9 @@ def webhook(token):
         #dapetin payload pake getPayload di util
         # send message ke group id tersebut
         payload = getPayload(request)
-        # handle eventnya dengan cara lempar ke githubEventRouter. 
+        print(group_id)
+        # handle eventnya dengan cara lempar ke githubEventRouter.
+        print(payload.keys())
         githubEventRouter(payload, group_id)
     else:
         pass
