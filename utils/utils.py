@@ -1,12 +1,6 @@
 # utils umum.
 import os
-import pytz
-import requests
 import json
-from datetime import datetime
-
-import config
-
 from cryptography.fernet import Fernet
 import base64
 
