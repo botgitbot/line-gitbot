@@ -119,7 +119,7 @@ def catch_all(path):
     return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
 
 # #    RUN FLASK APP
-# import config 
-# if __name__ == "__main__":
-#     portObject = int(os.environ.get('PORT', config.PORT))
-#     app.run(host='0.0.0.0', port=portObject)
+import config 
+if __name__ == "__main__":
+    portObject = int(os.environ.get('PORT', config.PORT))
+    app.run(host='0.0.0.0', port=portObject)
