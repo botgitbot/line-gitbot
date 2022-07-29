@@ -48,8 +48,6 @@ print(globalVariable.database)
 #    CREATE FLASK APP
 app = Flask(__name__)
 
-
-
 #    FLASK FUNCTION
 
 @app.route('/', methods=['GET'])
