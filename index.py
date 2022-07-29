@@ -36,9 +36,11 @@ from linebot.models import (
 from utils.firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
 
 
-from flask import Flask
+#    CREATE FLASK APP
 app = Flask(__name__)
 
+# SETUP LINE HANDLER
+handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
 
 #    FLASK FUNCTION
