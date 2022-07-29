@@ -1,3 +1,4 @@
+
 from dotenv import load_dotenv
 load_dotenv()
 # now you can use value from .env with from `os.environ` or `os.getenv`
@@ -9,13 +10,12 @@ from utils.utils import decryptGroupId, getPayload
 from handleLineEvent.lineEventRouter import lineEventRouter
 
 
-# IMPORT KAMUS(env, config, globalvariable)
-import config 
+# IMPORT KAMUS(env, globalvariable)
 import globalVariable
 globalVariable.initialize()
 
 # IMPORT SUBPROGRAM
-from flask import Flask, request, abort
+from flask import Flask, request, abort, Response
 import os
 from linebot import (
  WebhookHandler
@@ -35,10 +35,8 @@ from linebot.models import (
 from utils.firebaseUtils import setDatabaseFromFirebase
 
 
-#    CREATE FLASK APP
-app = Flask(__name__)
-
 # SETUP LINE HANDLER
+# lineHandler = WebhookHandler('LINE_CHANNEL_SECRET')
 lineHandler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
 # SETUP DATABASE
@@ -46,6 +44,12 @@ lineHandler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 setDatabaseFromFirebase()
 print("database sekarang")
 print(globalVariable.database)
+
+#    CREATE FLASK APP
+app = Flask(__name__)
+
+
+
 #    FLASK FUNCTION
 
 @app.route('/', methods=['GET'])
@@ -53,24 +57,24 @@ def hello():
     return 'Hello World!'
 
 
-    
-
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
+    print("request.headers")
+    print(request.headers)
+    print("X-Line-Signature")
+    print(request.headers["X-Line-Signature"])
     signature = request.headers['X-Line-Signature']
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    # app.logger.info("Request body: " + body)
     # handle webhook body
     try:
         lineHandler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
     return 'OK'
-
-
 
 @app.route("/webhook/<token>", methods=['POST'])
 def webhook(token):
@@ -96,7 +100,6 @@ def handle_message(event):
     # pake lineEventRouter
     pass
 
-
 # handle leave group event
 @lineHandler.add(LeaveEvent)
 def handle_leave(event):
@@ -110,12 +113,13 @@ def handle_invite(event):
     print("join?")
     lineEventRouter("join", event)
     # pake handleGroupInvite
-
-    pass
-
+    
+@app.route('/<path:path>')
+def catch_all(path):
+    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
 
 # #    RUN FLASK APP
-# import os
+# import config
 # if __name__ == "__main__":
 #     portObject = int(os.environ.get('PORT', config.PORT))
 #     app.run(host='0.0.0.0', port=portObject)

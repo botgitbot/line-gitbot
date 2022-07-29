@@ -47,3 +47,10 @@ def lineEventRouter(type, event):
         else:
             # coba suruh send !help mungkin
             pass
+
+
+# #    RUN FLASK APP
+# import os
+# if __name__ == "__main__":
+#     portObject = int(os.environ.get('PORT', config.PORT))
+#     app.run(host='0.0.0.0', port=portObject)

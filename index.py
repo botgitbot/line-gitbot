@@ -1,5 +1,4 @@
-import json
-import os
+
 from dotenv import load_dotenv
 load_dotenv()
 # now you can use value from .env with from `os.environ` or `os.getenv`
@@ -56,7 +55,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'Hello World!' +  json.dumps(globalVariable.database)
+    return 'Hello World!'
 
 
 # ini route yang dipake saat pertama kali nge connect in ke line dev
@@ -102,7 +101,6 @@ def handle_message(event):
     # pake lineEventRouter
     pass
 
-
 # handle leave group event
 @lineHandler.add(LeaveEvent)
 def handle_leave(event):
@@ -120,6 +118,7 @@ def handle_invite(event):
 @app.route('/<path:path>')
 def catch_all(path):
     return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
+
 # #    RUN FLASK APP
 # import os
 # if __name__ == "__main__":
