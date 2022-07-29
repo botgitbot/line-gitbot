@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "./temp.py",
+      "src": "./index.py",
       "use": "@vercel/python"
     }
   ],

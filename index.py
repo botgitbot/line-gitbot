@@ -38,7 +38,7 @@ from utils.firebaseUtils import setDatabaseFromFirebase
 
 
 # SETUP LINE HANDLER
-handler = WebhookHandler('LINE_CHANNEL_SECRET')
+lineHandler = WebhookHandler('LINE_CHANNEL_SECRET')
 # handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
 # SETUP DATABASE
