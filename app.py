@@ -3,7 +3,6 @@ load_dotenv()
 # now you can use value from .env with from `os.environ` or `os.getenv`
 
 from handleGithubEvent.githubEventRouter import githubEventRouter
-from utils.lineUtils import sendStringToGroup
 
 from utils.utils import decryptGroupId, getPayload
 
