@@ -34,11 +34,11 @@ from linebot.models import (
 
 
 
-from utils.firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
+from utils.firebaseUtils import setDatabaseFromFirebase
 
 
 # SETUP LINE HANDLER
-# handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
+handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
 # SETUP DATABASE
 # when the app is first run, the database should be matching what's on firebase
