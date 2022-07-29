@@ -95,6 +95,28 @@ def webhook(token):
         pass
     return 'OK'
 
+# handle message
+@lineHandler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    lineEventRouter("message",event)
+    # pake lineEventRouter
+    pass
+
+
+# handle leave group event
+@lineHandler.add(LeaveEvent)
+def handle_leave(event):
+    print("ada yg ngekick dari group!")
+    lineEventRouter("leave", event)
+    # pake handleGroupLeave
+    pass
+# handle diinvite ke dalem group
+@lineHandler.add(JoinEvent)
+def handle_invite(event):
+    print("join?")
+    lineEventRouter("join", event)
+    # pake handleGroupInvite
+    
 @app.route('/<path:path>')
 def catch_all(path):
     return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
