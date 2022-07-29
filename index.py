@@ -63,6 +63,8 @@ def hello():
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
+    print("request.headers")
+    print(request.headers)
     signature = request.headers['X-Line-Signature']
     # get request body as text
     body = request.get_data(as_text=True)
@@ -91,8 +93,11 @@ def webhook(token):
         pass
     return 'OK'
 
-#    RUN FLASK APP
-import os
-if __name__ == "__main__":
-    portObject = int(os.environ.get('PORT', config.PORT))
-    app.run(host='0.0.0.0', port=portObject)
+@app.route('/<path:path>')
+def catch_all(path):
+    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
+# #    RUN FLASK APP
+# import os
+# if __name__ == "__main__":
+#     portObject = int(os.environ.get('PORT', config.PORT))
+#     app.run(host='0.0.0.0', port=portObject)
