@@ -39,6 +39,12 @@ from utils.firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
 # SETUP LINE HANDLER
 # handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
+# SETUP DATABASE
+# when the app is first run, the database should be matching what's on firebase
+setDatabaseFromFirebase()
+print("database sekarang")
+print(globalVariable.database)
+
 #    CREATE FLASK APP
 app = Flask(__name__)
 
@@ -48,7 +54,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'Hello World!'
+    return 'Hello World!' + globalVariable.database
 
 @app.route("/webhook/<token>", methods=['POST'])
 def webhook(token):
