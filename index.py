@@ -36,11 +36,12 @@ from linebot.models import (
 from utils.firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
 
 
+# SETUP LINE HANDLER
+# handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
+
 #    CREATE FLASK APP
 app = Flask(__name__)
 
-# SETUP LINE HANDLER
-handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
 
 #    FLASK FUNCTION
@@ -48,3 +49,10 @@ handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 @app.route('/', methods=['GET'])
 def hello():
     return 'Hello World!'
+
+
+#    RUN FLASK APP
+import os
+if __name__ == "__main__":
+    portObject = int(os.environ.get('PORT', config.PORT))
+    app.run(host='0.0.0.0', port=portObject)
