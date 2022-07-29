@@ -5,10 +5,44 @@ load_dotenv()
 
 from handleGithubEvent.githubEventRouter import githubEventRouter
 
-# ini cuman flask sederhana, buat testing vercel e jalan ato ngga
+from utils.utils import decryptGroupId, getPayload
+
+from handleLineEvent.lineEventRouter import lineEventRouter
+
+
+# IMPORT KAMUS(env, config, globalvariable)
+import config 
+import globalVariable
+globalVariable.initialize()
+
+# IMPORT SUBPROGRAM
+from flask import Flask, request, abort
+import os
+from linebot import (
+ WebhookHandler
+)
+from linebot.exceptions import (
+    InvalidSignatureError
+)
+from linebot.models import (
+    MessageEvent,
+    LeaveEvent,
+    JoinEvent,
+    TextMessage,
+)
+
+
+
+from utils.firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
+
+
 from flask import Flask
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return "<h2>Hello World!</h2> " + os.getenv('LINE_CHANNEL_SECRET')
+
+
+#    FLASK FUNCTION
+
+@app.route('/', methods=['GET'])
+def hello():
+    return 'Hello World!'
