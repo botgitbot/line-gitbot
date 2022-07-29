@@ -39,7 +39,7 @@ from utils.firebaseUtils import setDatabaseFromFirebase
 app = Flask(__name__)
 
 # SETUP LINE HANDLER
-handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
+lineHandler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
 # SETUP DATABASE
 # when the app is first run, the database should be matching what's on firebase
@@ -65,7 +65,7 @@ def callback():
     app.logger.info("Request body: " + body)
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        lineHandler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
     return 'OK'
@@ -90,7 +90,7 @@ def webhook(token):
     return 'OK'
 
 # handle message
-@handler.add(MessageEvent, message=TextMessage)
+@lineHandler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     lineEventRouter("message",event)
     # pake lineEventRouter
@@ -98,14 +98,14 @@ def handle_message(event):
 
 
 # handle leave group event
-@handler.add(LeaveEvent)
+@lineHandler.add(LeaveEvent)
 def handle_leave(event):
     print("ada yg ngekick dari group!")
     lineEventRouter("leave", event)
     # pake handleGroupLeave
     pass
 # handle diinvite ke dalem group
-@handler.add(JoinEvent)
+@lineHandler.add(JoinEvent)
 def handle_invite(event):
     print("join?")
     lineEventRouter("join", event)
