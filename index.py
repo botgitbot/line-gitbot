@@ -11,7 +11,6 @@ from handleLineEvent.lineEventRouter import lineEventRouter
 
 
 # IMPORT KAMUS(env, config, globalvariable)
-import config 
 import globalVariable
 globalVariable.initialize()
 
@@ -120,7 +119,7 @@ def catch_all(path):
     return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
 
 # #    RUN FLASK APP
-# import os
+# import config 
 # if __name__ == "__main__":
 #     portObject = int(os.environ.get('PORT', config.PORT))
 #     app.run(host='0.0.0.0', port=portObject)
