@@ -58,6 +58,22 @@ app = Flask(__name__)
 def hello():
     return 'Hello World!' +  json.dumps(globalVariable.database)
 
+
+# ini route yang dipake saat pertama kali nge connect in ke line dev
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+    # handle webhook body
+    try:
+        lineHandler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+    return 'OK'
+
 @app.route("/webhook/<token>", methods=['POST'])
 def webhook(token):
     # decrypt path args buat dapetin group id
