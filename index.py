@@ -17,7 +17,7 @@ import globalVariable
 globalVariable.initialize()
 
 # IMPORT SUBPROGRAM
-from flask import Flask, request, abort
+from flask import Flask, request, abort, Response
 import os
 from linebot import (
  WebhookHandler
