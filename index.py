@@ -50,6 +50,22 @@ app = Flask(__name__)
 def hello():
     return 'Hello World!'
 
+@app.route("/webhook/<token>", methods=['POST'])
+def webhook(token):
+    # decrypt path args buat dapetin group id
+    group_id = decryptGroupId(token)
+    # cek group id ada ngga di database bagian active. kalo ada, handle eventnya. kalo gada, do nothing(artinya gada group id tersebut yg nge invite kita)
+    if(group_id in globalVariable.database["active"].keys()):
+        #dapetin payload pake getPayload di util
+        # send message ke group id tersebut
+        payload = getPayload(request)
+        print(group_id)
+        # handle eventnya dengan cara lempar ke githubEventRouter.
+        print(payload.keys())
+        githubEventRouter(payload, group_id)
+    else:
+        pass
+    return 'OK'
 
 #    RUN FLASK APP
 import os
