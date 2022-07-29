@@ -15,6 +15,9 @@ def handleShowRepo(reply_token, group_id):
                 username = globalVariable.database["active"][group_id][webhookId]["username"]
                 repo = globalVariable.database["active"][group_id][webhookId]["repo"]
                 stringToSend += username + ": " + repo + "\n"
-        replyFlexMessageTemplateTitleText(reply_token, "Repository list in this group: ", stringToSend)
+        if(stringToSend == ""):
+            replyString(reply_token, "no repo added yet")
+        else:
+            replyFlexMessageTemplateTitleText(reply_token, "Repository list in this group: ", stringToSend)
     else:
         replyString(reply_token, "no repo added yet")
