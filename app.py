@@ -32,7 +32,7 @@ from linebot.models import (
 
 
 
-from utils.firebaseUtils import setDatabaseFromFirebase, setFirebaseFromDatabase
+from utils.firebaseUtils import setDatabaseFromFirebase
 
 
 #    CREATE FLASK APP
