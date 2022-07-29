@@ -1,3 +1,4 @@
+import json
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -54,7 +55,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'Hello World!' + globalVariable.database
+    return 'Hello World!' +  json.dumps(globalVariable.database)
 
 @app.route("/webhook/<token>", methods=['POST'])
 def webhook(token):
