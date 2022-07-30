@@ -1,7 +1,9 @@
 import globalVariable
 from utils.firebaseUtils import setFirebaseFromDatabase
-def handleAddWebhookToRepo(groupId, hookId, username, repo):
-    globalVariable.database["active"][groupId] = {hookId: {"username": username, "repo": repo}}
+from utils.lineUtils import sendStringToGroup
+def handleAddWebhookToRepo(group_id, hookId, username, repo):
+    globalVariable.database["active"][group_id] = {hookId: {"username": username, "repo": repo}}
     setFirebaseFromDatabase()
+    sendStringToGroup(group_id, username +"/" + repo + " is now tracked!")
+
     # update database, trus update firebase
-    pass

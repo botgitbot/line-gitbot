@@ -1,13 +1,8 @@
 from utils.lineUtils import sendFlexMessageToGroup, standardFlexMessageClass, flexMessageWithUrlClass
 
 
-def handlePullRequestEvent(group_id, repo_title, payload):
-    action = payload["action"]
-    user = payload["pull_request"]["user"]["login"]
-    pull_request_title = payload["pull_request"]["title"]
-    head_ref = payload["pull_request"]["head"]["ref"]
-    base_ref = payload["pull_request"]["base"]["ref"]
-    requested_reviewers = payload["pull_request"]["requested_reviewers"]
+def handlePullRequestEvent(group_id, repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url):
+  
     
     text_content = f"{user} {action} pull request \"{pull_request_title}\" from {head_ref} to {base_ref}"
     if len(requested_reviewers) > 0:
@@ -16,7 +11,6 @@ def handlePullRequestEvent(group_id, repo_title, payload):
             text_content += f"\n    - {reviewer['login']}"
     
     if action == "opened" or action == "reopened":
-        pull_request_url = payload["pull_request"]["url"]
         flex_message = flexMessageWithUrlClass(repo_title, text_content, pull_request_url, "See Pull Request").flexMessageTemplate
         sendFlexMessageToGroup(group_id, flex_message)
     elif action == "closed":

@@ -14,7 +14,7 @@ def handleShowRepo(reply_token, group_id):
             if(webhookId != "examplewebhook"):
                 username = globalVariable.database["active"][group_id][webhookId]["username"]
                 repo = globalVariable.database["active"][group_id][webhookId]["repo"]
-                stringToSend += username + ": " + repo + "\n"
+                stringToSend += username + " / " + repo + "\n"
         if(stringToSend == ""):
             replyString(reply_token, "no repo added yet")
         else:

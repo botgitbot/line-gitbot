@@ -1,12 +1,7 @@
 from utils.lineUtils import flexMessageWithUrlClass, sendFlexMessageToGroup
 
 
-def handlePushEvent(group_id, repo_title, payload):
-    pusher = payload["pusher"]["name"]
-    ref = payload["ref"]
-    commits = payload["commits"]
-    compare_changes_url = payload["compare"]
-
+def handlePushEvent(group_id, repo_title, pusher, ref, commits, compare_changes_url):
     text_content = f"{pusher} pushed to branch {ref}"
     if len(commits) > 0:
         text_content += f" with {len(commits)} commits:"
