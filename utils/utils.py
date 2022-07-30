@@ -60,20 +60,16 @@ def getPayload(request):
         if request.form['payload']:
             isForm = True
         isForm = True
-        print("keknya form")
     except:
-        print("keknya json")
         pass
 
     if isForm:
-        print("payload(form)")
         # print(type(request.form))
         # print(request.form.keys())
         # dict_keys(['payload'])
         # print(request.form['payload'])
         inString = request.form['payload']
     else:
-        print("payload(json)")
         # print(request.json)
         inString = request.json
     # return dalam bentuk dict

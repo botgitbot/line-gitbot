@@ -58,6 +58,8 @@ def hello():
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():
+    print("line webhook triggered")
+
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
     # get request body as text
@@ -72,6 +74,7 @@ def callback():
 
 @app.route("/webhook/<token>", methods=['POST'])
 def webhook(token):
+    print("gitbub webhook triggered")
     # decrypt path args buat dapetin group id
     group_id = decryptGroupId(token)
     # cek group id ada ngga di database bagian active. kalo ada, handle eventnya. kalo gada, do nothing(artinya gada group id tersebut yg nge invite kita)
