@@ -1,5 +1,7 @@
 # environment variables.
 .env
+.env.prod
+.env.dev
 
 # firebase credential
 firebaseCredential.json
