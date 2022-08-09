@@ -44,8 +44,6 @@ lineHandler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 # SETUP DATABASE
 # when the app is first run, the database should be matching what's on firebase
 setDatabaseFromFirebase()
-print("database sekarang")
-print(globalVariable.database)
 
 #    CREATE FLASK APP
 app = Flask(__name__)
@@ -61,8 +59,6 @@ def hello():
 # ini route yang dipake saat pertama kali nge connect in ke line dev
 @app.route("/callback", methods=['POST'])
 def callback():
-    print("line webhook triggered")
-
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
     # get request body as text
@@ -77,7 +73,6 @@ def callback():
 
 @app.route("/webhook/<token>", methods=['POST'])
 def webhook(token):
-    print("gitbub webhook triggered")
     # decrypt path args buat dapetin group id
     group_id = decryptGroupId(token)
     # cek group id ada ngga di database bagian active. kalo ada, handle eventnya. kalo gada, do nothing(artinya gada group id tersebut yg nge invite kita)
@@ -85,9 +80,7 @@ def webhook(token):
         #dapetin payload pake getPayload di util
         # send message ke group id tersebut
         payload = getPayload(request)
-        print(group_id)
         # handle eventnya dengan cara lempar ke githubEventRouter.
-        print(payload.keys())
         githubEventRouter(payload, group_id)
     else:
         pass
@@ -103,14 +96,12 @@ def handle_message(event):
 # handle leave group event
 @lineHandler.add(LeaveEvent)
 def handle_leave(event):
-    print("ada yg ngekick dari group!")
     lineEventRouter("leave", event)
     # pake handleGroupLeave
     pass
 # handle diinvite ke dalem group
 @lineHandler.add(JoinEvent)
 def handle_invite(event):
-    print("join?")
     lineEventRouter("join", event)
     # pake handleGroupInvite
     

@@ -20,7 +20,6 @@ def githubEventRouter(payload, group_id):
         handlePushEvent(group_id, repo_title, pusher, ref, commits, compare_changes_url)
 
     elif("action" in payload.keys()):
-        print("ada action " + str(payload["action"]))
         if(payload["action"] == "opened"):
             repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url = pullRequestEventStripper(payload)
             handlePullRequestEvent(group_id, repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url)

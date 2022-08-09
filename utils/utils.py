@@ -64,13 +64,8 @@ def getPayload(request):
         pass
 
     if isForm:
-        # print(type(request.form))
-        # print(request.form.keys())
-        # dict_keys(['payload'])
-        # print(request.form['payload'])
         inString = request.form['payload']
     else:
-        # print(request.json)
         inString = request.json
     # return dalam bentuk dict
     # instring to dict
