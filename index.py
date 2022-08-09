@@ -1,6 +1,8 @@
 
 from dotenv import load_dotenv
+
 load_dotenv(".env.dev")
+
 # now you can use value from .env with from `os.environ` or `os.getenv`
 
 from handleGithubEvent.githubEventRouter import githubEventRouter
@@ -53,6 +55,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def hello():
     return 'Hello World! dev'
+
 
 
 # ini route yang dipake saat pertama kali nge connect in ke line dev
