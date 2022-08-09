@@ -1,7 +1,7 @@
 
 from dotenv import load_dotenv
 
-load_dotenv(".env.dev")
+load_dotenv(".env.prod")
 
 # now you can use value from .env with from `os.environ` or `os.getenv`
 
@@ -52,7 +52,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'Hello World! dev'
+    return 'Hello World! prod'
 
 
 
