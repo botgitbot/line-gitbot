@@ -52,7 +52,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'Hello World!'
+    return 'Hello World! prod'
 
 
 # ini route yang dipake saat pertama kali nge connect in ke line dev
