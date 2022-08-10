@@ -14,28 +14,28 @@ def githubEventRouter(payload, group_id):
         # add webhook to repo
         hook_id, username, repo = addWebhookToRepoStripper(payload)
         handleAddWebhookToRepo(group_id, hook_id, username, repo)
-    elif("ref" in payload.keys()):
+    elif("pusher" in payload.keys()):
         # push or merge
         repo_title, pusher, ref, commits, compare_changes_url = pushEventStripper(payload)
         handlePushEvent(group_id, repo_title, pusher, ref, commits, compare_changes_url)
 
     elif("action" in payload.keys()):
-        print("ada action " + str(payload["action"]))
-        if(payload["action"] == "opened"):
-            repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url = pullRequestEventStripper(payload)
-            handlePullRequestEvent(group_id, repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url)
+        if ("pull_request" in payload.keys()):
+            if(payload["action"] == "opened"):
+                repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url = pullRequestEventStripper(payload)
+                handlePullRequestEvent(group_id, repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url)
+            if("comment" in payload.keys() and payload["action"] == "created"):
+                repo_title, author, pull_request_title, comment_body, comment_url = pullRequestReviewCommentEventStripper(payload)
+                handlePullRequestReviewCommentEvent(group_id, repo_title, author, pull_request_title, comment_body, comment_url)
 
-        if(payload["action"] == "deleted"):
+        elif(payload["action"] == "deleted"):
             webhook_id, username, repo = deleteRepoStripper(payload)
             handleDeleteRepoEvent(group_id, webhook_id, username, repo)
             
-        if(payload["action"] == "created"):
-            repo_title, author, pull_request_title, comment_body, comment_url = pullRequestReviewCommentEventStripper(payload)
-            handlePullRequestReviewCommentEvent(group_id, repo_title, author, pull_request_title, comment_body, comment_url)
-
-        if(payload["action"] == "published"):
-            repo_title, action, is_prerelease, user, release_title, release_url, release_tag = releaseEventStripper(payload)
-            handleReleaseEvent(group_id,repo_title, action, is_prerelease, user, release_title, release_url, release_tag)
+        elif ("release" in payload.keys()):
+            if(payload["action"] == "published"):
+                repo_title, action, is_prerelease, user, release_title, release_url, release_tag = releaseEventStripper(payload)
+                handleReleaseEvent(group_id,repo_title, action, is_prerelease, user, release_title, release_url, release_tag)
 
 
 
