@@ -2,6 +2,7 @@
 from handleLineEvent.handleAddRepo import handleAddRepo
 from handleLineEvent.handleGroupJoin import handleGroupJoin
 from handleLineEvent.handleGroupLeave import handleGroupLeave
+from handleLineEvent.handleManualDelete import handleManualDelete
 from handleLineEvent.handleShowRepo import handleShowRepo
 from handleLineEvent.handleSendHelp import handleSendHelp
 from utils.lineUtils import replyString
@@ -44,6 +45,8 @@ def lineEventRouter(type, event):
 
         elif msg_from_user == '!help':
             handleSendHelp(reply_token)
+        elif msg_from_user[:15] == '!manualdelete ':
+            handleManualDelete(reply_token, source_id, msg_from_user)
         else:
             # coba suruh send !help mungkin
             pass

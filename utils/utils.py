@@ -3,6 +3,8 @@ import os
 import json
 from cryptography.fernet import Fernet
 import base64
+import globalVariable
+from utils.firebaseUtils import setFirebaseFromDatabase
 
 def sanitizeMessage(message):
     # sanitize msg_from_user
@@ -10,30 +12,6 @@ def sanitizeMessage(message):
     message = message.strip()
     message = ' '.join(message.split())
     return message
-
-def splitMessageRepoUsernameToken(message):
-    # message = "username/repo:token"
-    # return "username", "repo", "token"
-    repousername_token = message.split(":")
-    repo_username = repousername_token[0]
-    token = repousername_token[1]
-    username = repo_username.split("/")[0]
-    repo = repo_username.split("/")[1]
-    return username, repo, token
-
-def splitMessageRepoUsername(message):
-    # message = "username/repo"
-    # return "username", "repo"
-    repousername = message.split("/")
-    username = repousername[0]
-    repo = repousername[1]
-    return username, repo
-
-def createDatabaseValueFromUsernameAndRepo(username, repo):
-    return username + "@" + repo
-
-def databaseValueToUsernameAndRepo(key):
-    return key.split("@")[0], key.split("@")[1]
 
 
 def encryptGroupId(groupid):
@@ -76,3 +54,9 @@ def getPayload(request):
     # instring to dict
     inDict = json.loads(inString)
     return inDict
+
+def addWebhookToDatabase(group_id, hook_id, username, repo):
+    # add webhook to database
+    globalVariable.database["active"][group_id][hook_id] = {"username": username, "repo": repo}
+    setFirebaseFromDatabase()
+    return
