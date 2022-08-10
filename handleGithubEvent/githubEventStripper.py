@@ -4,10 +4,10 @@ def mergePullRequestStripper(payload):
 
 def addWebhookToRepoStripper(payload):
     # ngembaliin data yang dibutuhin dari payload
-    hook_id = payload["hook_id"]
+
     username = payload["sender"]["login"]
     repo = payload["repository"]["name"]
-    return hook_id, username, repo
+    return username, repo
 
 def pushEventStripper(payload):
     repo_title = payload["repository"]["full_name"]
@@ -47,8 +47,7 @@ def pullRequestReviewCommentEventStripper(payload):
     return repo_title, author, pull_request_title, comment_body, comment_url
 
 def deleteRepoStripper(payload):
-    webhook_id = payload["hook_id"]
     username = payload["repository"]["owner"]["login"]
     repo = payload["repository"]["name"]
 
-    return webhook_id, username, repo
+    return username, repo
