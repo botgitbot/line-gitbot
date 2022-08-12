@@ -5,4 +5,5 @@
 # INTERLUDE = 20
 PORT = 8000
 # TIME_TOLERANCE = 5
-placeholderWebhook = {"examplewebhook":{"exampleusername": "exampleusername", "examplerepo": "examplerepo"}}
+exampleKey = "examplekey"
+placeholderWebhook = {exampleKey:{"exampleusername": "exampleusername", "examplerepo": "examplerepo"}}

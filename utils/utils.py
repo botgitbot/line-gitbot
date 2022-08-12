@@ -3,6 +3,9 @@ import os
 import json
 from cryptography.fernet import Fernet
 import base64
+import globalVariable
+from utils.firebaseUtils import setFirebaseFromDatabase
+from config import placeholderWebhook
 
 def sanitizeMessage(message):
     # sanitize msg_from_user
@@ -10,30 +13,6 @@ def sanitizeMessage(message):
     message = message.strip()
     message = ' '.join(message.split())
     return message
-
-def splitMessageRepoUsernameToken(message):
-    # message = "username/repo:token"
-    # return "username", "repo", "token"
-    repousername_token = message.split(":")
-    repo_username = repousername_token[0]
-    token = repousername_token[1]
-    username = repo_username.split("/")[0]
-    repo = repo_username.split("/")[1]
-    return username, repo, token
-
-def splitMessageRepoUsername(message):
-    # message = "username/repo"
-    # return "username", "repo"
-    repousername = message.split("/")
-    username = repousername[0]
-    repo = repousername[1]
-    return username, repo
-
-def createDatabaseValueFromUsernameAndRepo(username, repo):
-    return username + "@" + repo
-
-def databaseValueToUsernameAndRepo(key):
-    return key.split("@")[0], key.split("@")[1]
 
 
 def encryptGroupId(groupid):
@@ -71,3 +50,43 @@ def getPayload(request):
     # instring to dict
     inDict = json.loads(inString)
     return inDict
+
+def addWebhookToDatabase(group_id, username, repo):
+    # add webhook to database
+    urkey = usernameAndRepoAsDatabaseKey(username, repo)
+    globalVariable.database["active"][group_id][urkey] = {"username": username, "repo": repo}
+    setFirebaseFromDatabase()
+    return
+
+def isWebhookRecorded(group_id, username, repo):
+    # check if webhook is recorded in database
+    if(group_id in list(globalVariable.database["active"].keys())):
+        urkey = usernameAndRepoAsDatabaseKey(username, repo)
+        if(urkey in list(globalVariable.database["active"][group_id].keys())):
+            return True
+    return False
+
+
+def usernameAndRepoAsDatabaseKey(username, repo):
+    # username and repo to key
+    return username + "@" + repo
+
+def databaseKeyToUsernameAndRepo(key):
+    # key to username and repo
+    username = key.split("@")[0]
+    repo = key.split("@")[1]
+    return username, repo
+
+def isGroupIdRecorded(group_id):
+    # check if group_id is recorded in database
+    if(group_id in list(globalVariable.database["active"].keys())):
+        return True
+    return False
+
+def addGroupIdToActive(group_id):
+    if(group_id in globalVariable.database["inactive"].keys()):
+        globalVariable.database["active"][group_id] = globalVariable.database["inactive"][group_id]
+        del globalVariable.database["inactive"][group_id]
+    else:
+        globalVariable.database["active"][group_id] = placeholderWebhook
+    setFirebaseFromDatabase()

@@ -2,10 +2,11 @@
 from handleLineEvent.handleAddRepo import handleAddRepo
 from handleLineEvent.handleGroupJoin import handleGroupJoin
 from handleLineEvent.handleGroupLeave import handleGroupLeave
+from handleLineEvent.handleManualDelete import handleManualDelete
 from handleLineEvent.handleShowRepo import handleShowRepo
 from handleLineEvent.handleSendHelp import handleSendHelp
 from utils.lineUtils import replyString
-from utils.utils import sanitizeMessage
+from utils.utils import addGroupIdToActive, isGroupIdRecorded, sanitizeMessage
 # udah gada campur tangan sama flask
 
 def lineEventRouter(type, event):
@@ -34,8 +35,12 @@ def lineEventRouter(type, event):
 
         msg_from_user = sanitizeMessage(msg_from_user)
 
-        # Route event to the correct handler
 
+        # check if group id recorded
+        if not isGroupIdRecorded(source_id):
+            addGroupIdToActive(source_id)
+
+        # Route event to the correct handler
         if msg_from_user == '!add':
             handleAddRepo(reply_token, source_id)
             
@@ -44,6 +49,8 @@ def lineEventRouter(type, event):
 
         elif msg_from_user == '!help':
             handleSendHelp(reply_token)
+        elif msg_from_user[:14] == '!manualdelete ':
+            handleManualDelete(reply_token, source_id, msg_from_user)
         else:
             # coba suruh send !help mungkin
             pass
