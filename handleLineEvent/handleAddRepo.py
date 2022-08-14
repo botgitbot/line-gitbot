@@ -8,5 +8,5 @@ def handleAddRepo(reply_token, group_id):
     # reply with a webhook link sesuai dengan groupid mereka (di encrypt dulu ye) formatnya https://domain.com/webhook/<encryptedgroupid>
     encrypted = encryptGroupId(group_id)
     link = "https://line-gitbot.vercel.app/webhook/" + encrypted
-    replyString(reply_token, "Please add following url to your repository webhook (repo > Settings > Webhooks > Add webhook):"  + "\n" + link)
+    replyString(reply_token, "Please add following URL to your repository webhook (Repository page > Settings > Webhooks > Add webhook):"  + "\n" + link)
     
