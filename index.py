@@ -1,13 +1,10 @@
-
+#LOAD ENV
 from dotenv import load_dotenv
 load_dotenv(".env.dev")
 # now you can use value from .env with from `os.environ` or `os.getenv`
 
-
 from handleGithubEvent.githubEventRouter import githubEventRouter
-
 from utils.utils import decryptGroupId, getPayload
-
 from handleLineEvent.lineEventRouter import lineEventRouter
 
 
@@ -32,7 +29,6 @@ from linebot.models import (
 )
 
 
-
 from utils.firebaseUtils import setDatabaseFromFirebase
 
 
@@ -51,7 +47,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def hello():
-    return 'Hello World! prod'
+    return os.getenv("DEPLOYMENT_MESSAGE")
 
 
 
