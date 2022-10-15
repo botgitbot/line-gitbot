@@ -132,7 +132,7 @@ def testVariable():
         # send current variable to LINE Group
         sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "testvariable")
         sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "globalVariable = " + str(globalVariable.database))
-        sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "placeholderWebhook = " +  placeholderWebhook)
+        sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "placeholderWebhook = " +  str(placeholderWebhook))
         return "test"
     except Exception as e:
         return handleException(e)
