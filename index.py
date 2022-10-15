@@ -90,8 +90,7 @@ def webhook(token):
             payload = getPayload(request)
             # handle eventnya dengan cara lempar ke githubEventRouter.
             githubEventRouter(payload, group_id)
-        else:
-            pass
+
         return 'OK'
     except Exception as e:
         return handleException(e)
