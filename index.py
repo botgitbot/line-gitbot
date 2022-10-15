@@ -1,5 +1,7 @@
 #LOAD ENV
 from dotenv import load_dotenv
+
+from utils.lineUtils import sendStringToGroup
 load_dotenv(".env.dev")
 # now you can use value from .env with from `os.environ` or `os.getenv`
 
@@ -103,6 +105,15 @@ def handle_invite(event):
 @app.route('/<path:path>')
 def catch_all(path):
     return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
+
+
+# a way to check current variable state
+@app.route("/testvariable", methods=['GET'])
+def test():
+    # send current variable to LINE Group
+    sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "testvariable")
+    sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "globalVariable = " + str(globalVariable.database))
+    return "test"
 
 # #    RUN FLASK APP
 import config 
