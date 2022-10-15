@@ -5,7 +5,7 @@ def mergePullRequestStripper(payload):
 def addWebhookToRepoStripper(payload):
     # ngembaliin data yang dibutuhin dari payload
 
-    username = payload["sender"]["login"]
+    username = payload["repository"]["owner"]["login"]
     repo = payload["repository"]["name"]
     return username, repo
 
