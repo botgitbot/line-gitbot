@@ -25,7 +25,7 @@ def pullRequestEventStripper(payload):
     head_ref = payload["pull_request"]["head"]["ref"]
     base_ref = payload["pull_request"]["base"]["ref"]
     requested_reviewers = payload["pull_request"]["requested_reviewers"]
-    pull_request_url = payload["pull_request"]["url"]
+    pull_request_url = payload["pull_request"]["html_url"]
     return repo_title, action, user, pull_request_title, head_ref, base_ref, requested_reviewers, pull_request_url
 
 def releaseEventStripper(payload):

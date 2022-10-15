@@ -6,6 +6,7 @@ def handlePushEvent(group_id, repo_title, pusher, ref, commits, compare_changes_
     if len(commits) > 0:
         text_content += f" with {len(commits)} commits:"
         for commit in commits:
-            text_content += f"\n  - {commit['message']}"
+            commit_message = commit['message'].rpartition('\n')[0] if '\n' in commit['message'] else commit['message']
+            text_content += f"\n  - {commit_message}"
     flex_message = flexMessageWithUrlClass(repo_title, text_content, compare_changes_url, "Compare Changes").flexMessageTemplate
     sendFlexMessageToGroup(group_id, flex_message)
