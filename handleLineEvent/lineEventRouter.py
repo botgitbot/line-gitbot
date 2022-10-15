@@ -35,11 +35,9 @@ def lineEventRouter(type, event):
 
         msg_from_user = sanitizeMessage(msg_from_user)
 
-
         # check if group id recorded
         if not isGroupIdRecorded(source_id):
             addGroupIdToActive(source_id)
-
         # Route event to the correct handler
         if msg_from_user == '!add':
             handleAddRepo(reply_token, source_id)
@@ -49,6 +47,7 @@ def lineEventRouter(type, event):
 
         elif msg_from_user == '!help':
             handleSendHelp(reply_token)
+            
         elif msg_from_user[:14] == '!manualdelete ':
             handleManualDelete(reply_token, source_id, msg_from_user)
         else:
