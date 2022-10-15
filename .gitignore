@@ -1,11 +1,8 @@
 # environment variables.
-.env
 .env.dev
 .env.prod
 
 
-# firebase credential
-firebaseCredential.json
 
 # cache
  __pycache__/
