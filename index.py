@@ -1,9 +1,8 @@
 
 from dotenv import load_dotenv
-
 load_dotenv(".env.dev")
-
 # now you can use value from .env with from `os.environ` or `os.getenv`
+
 
 from handleGithubEvent.githubEventRouter import githubEventRouter
 
