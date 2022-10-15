@@ -33,6 +33,7 @@ from linebot.models import (
 
 from utils.firebaseUtils import setDatabaseFromFirebase
 
+from config import placeholderWebhook
 
 # SETUP LINE HANDLER
 # lineHandler = WebhookHandler('LINE_CHANNEL_SECRET')
@@ -113,7 +114,7 @@ def test():
     # send current variable to LINE Group
     sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "testvariable")
     sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "globalVariable = " + str(globalVariable.database))
-    sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "placeholderWebhook = " +  str(globalVariable.placeholderWebhook))
+    sendStringToGroup("C05d96b6e4830bac9f4d10ee890c09666", "placeholderWebhook = " +  placeholderWebhook)
     return "test"
 
 # #    RUN FLASK APP
