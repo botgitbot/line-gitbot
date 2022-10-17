@@ -17,8 +17,8 @@ def githubEventRouter(payload, group_id):
         handleAddWebhookToRepo(group_id, username, repo)
     else:
         # check apakah webhook udah ada di datatase
-        if not isWebhookRecorded(group_id, payload["repository"]["owner"]["name"], payload["repository"]["name"]):
-            addWebhookToDatabase(group_id, payload["repository"]["owner"]["name"], payload["repository"]["name"])
+        if not isWebhookRecorded(group_id, payload["repository"]["owner"]["login"], payload["repository"]["name"]):
+            addWebhookToDatabase(group_id, payload["repository"]["owner"]["login"], payload["repository"]["name"])
 
         if("pusher" in payload.keys()):
             # push or merge
